@@ -1,4 +1,4 @@
-package com.brahvim.nerd.framework.scene_api;
+package com.brahvim.nerd.framework.scene_layer_api;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

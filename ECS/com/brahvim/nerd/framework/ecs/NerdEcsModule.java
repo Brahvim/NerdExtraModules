@@ -11,9 +11,9 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import com.brahvim.nerd.framework.scene_api.NerdScene;
-import com.brahvim.nerd.framework.scene_api.NerdScenesModule;
-import com.brahvim.nerd.framework.scene_api.NerdScenesModule.NerdScenesModuleNewSceneStartedListener;
+import com.brahvim.nerd.framework.scene_layer_api.NerdScene;
+import com.brahvim.nerd.framework.scene_layer_api.NerdScenesModule;
+import com.brahvim.nerd.framework.scene_layer_api.NerdScenesModule.NerdScenesModuleNewSceneStartedListener;
 import com.brahvim.nerd.io.net.NerdUdpSocket;
 import com.brahvim.nerd.io.net.tcp.NerdTcpServer;
 import com.brahvim.nerd.processing_wrapper.NerdModule;

@@ -1,6 +1,6 @@
 package com.brahvim.nerd.io.class_loaders;
 
-import com.brahvim.nerd.framework.scene_api.NerdScene;
+import com.brahvim.nerd.framework.scene_layer_api.NerdScene;
 
 public class NerdSceneClassLoader extends NerdLoadableClass<NerdScene<?>> {
 
