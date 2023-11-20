@@ -9,6 +9,6 @@ public abstract class NerdEcsComponent implements Serializable {
 	protected NerdEcsComponent() {
 	}
 
-	public abstract void copyFieldsFrom(final NerdEcsComponent p_other);
+	public abstract <ComponentT extends NerdEcsComponent> void copyFieldsFrom(final ComponentT p_other);
 
 }

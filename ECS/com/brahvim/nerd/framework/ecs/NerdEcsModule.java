@@ -12,8 +12,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import com.brahvim.nerd.framework.scene_api.NerdScene;
-import com.brahvim.nerd.framework.scene_api.NerdSceneState;
 import com.brahvim.nerd.framework.scene_api.NerdScenesModule;
+import com.brahvim.nerd.framework.scene_api.NerdScenesModule.NerdScenesModuleNewSceneStartedListener;
 import com.brahvim.nerd.io.net.NerdUdpSocket;
 import com.brahvim.nerd.io.net.tcp.NerdTcpServer;
 import com.brahvim.nerd.processing_wrapper.NerdModule;
@@ -23,7 +23,7 @@ import com.brahvim.nerd.processing_wrapper.NerdSketchSettings;
 import com.brahvim.nerd.utils.NerdByteSerialUtils;
 import com.brahvim.nerd.utils.java_function_extensions.NerdTriConsumer;
 
-public class NerdEcsModule extends NerdModule {
+public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewSceneStartedListener {
 
 	// region Fields.
 	public static final long serialVersionUID = -6488574946L;
@@ -51,17 +51,17 @@ public class NerdEcsModule extends NerdModule {
 
 	@Override
 	protected void assignModuleSettings(final NerdModuleSettings<?> p_settings) {
-		if (p_settings instanceof final NerdEcsModuleSettings settings) {
+		if (p_settings instanceof final NerdEcsModuleSettings settings)
 			this.setSystemsOrder(settings.ecsSystemsOrder);
-		} else {
+		else
 			this.setSystemsOrder(NerdEcsModule.DEFAULT_ECS_SYSTEMS_ORDER);
-		}
 	}
 	// endregion
 
 	// region `callOnAllSystems()` overloads.
 	@SuppressWarnings("all")
-	protected void callOnAllSystems(final BiConsumer<NerdEcsSystem, HashSet<? extends NerdEcsComponent>> p_methodRef) {
+	protected void callOnAllSystems(
+			final BiConsumer<NerdEcsSystem, Set<? extends NerdEcsComponent>> p_methodRef) {
 		if (p_methodRef == null || this.ecsSystems == null)
 			return;
 
@@ -75,7 +75,7 @@ public class NerdEcsModule extends NerdModule {
 
 	@SuppressWarnings("all")
 	protected <OtherArgT> void callOnAllSystems(
-			final NerdTriConsumer<NerdEcsSystem, OtherArgT, HashSet<? extends NerdEcsComponent>> p_methodRef,
+			final NerdTriConsumer<NerdEcsSystem, OtherArgT, Set<? extends NerdEcsComponent>> p_methodRef,
 			final OtherArgT p_otherArg) {
 		if (p_methodRef == null || this.ecsSystems == null)
 			return;
@@ -120,21 +120,34 @@ public class NerdEcsModule extends NerdModule {
 	// region Workflow callbacks (declared as `protected`).
 	@Override
 	protected void sketchConstructed(final NerdSketchSettings<?> p_settings) {
-		super.SKETCH.getNerdModule(NerdScenesModule.class).addNewSceneStartedListener(this::sceneChanged);
+		// super.SKETCH.getNerdModule(NerdScenesModule.class).addNewSceneStartedListener(()
+		// this.callOnAllSystems(NerdEcsSystem::sceneChanged);
+		// );
 	}
 
 	// From `NerdScenesModule`:
-	@SuppressWarnings("unchecked")
-	protected void sceneChanged(
+	@Override
+	public void sceneChanged(
 			final NerdScenesModule<?> p_scenesModule,
 			final Class<? extends NerdScene<?>> p_previousClass,
 			final Class<? extends NerdScene<?>> p_currentClass) {
-		this.callOnAllSystems(NerdEcsSystem::sceneChanged);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	protected void preSetup() {
+		this.callOnAllSystems(NerdEcsSystem::preSetup);
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void setup(final NerdSceneState p_state) {
-		this.callOnAllSystems(NerdEcsSystem::setup, p_state);
+	protected void setup() {
+		this.callOnAllSystems(NerdEcsSystem::setup);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	protected void postSetup() {
+		this.callOnAllSystems(NerdEcsSystem::setup);
 	}
 
 	@Override
@@ -144,8 +157,18 @@ public class NerdEcsModule extends NerdModule {
 	}
 
 	@SuppressWarnings("all")
+	protected void preDraw() {
+		this.callOnAllSystems(NerdEcsSystem::preDraw);
+	}
+
+	@SuppressWarnings("all")
 	protected void draw() {
 		this.callOnAllSystems(NerdEcsSystem::draw);
+	}
+
+	@SuppressWarnings("all")
+	protected void postDraw() {
+		this.callOnAllSystems(NerdEcsSystem::postDraw);
 	}
 
 	@SuppressWarnings("all")
@@ -432,10 +455,10 @@ public class NerdEcsModule extends NerdModule {
 				latestSetIterator = p_deserialized.components.iterator();
 
 		while (originalSetIterator.hasNext() && latestSetIterator.hasNext()) {
-			final NerdEcsComponent orig = originalSetIterator.next(), latest = latestSetIterator.next();
-			orig.copyFieldsFrom(latest);
+			final NerdEcsComponent original = originalSetIterator.next(),
+					latest = latestSetIterator.next();
+			original.copyFieldsFrom(latest);
 		}
-
 		// endregion
 	}
 	// endregion
