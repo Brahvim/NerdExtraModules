@@ -35,10 +35,11 @@ import processing.core.PGraphics;
 public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 
 	public final NerdScene<SketchPGraphicsT> SCENE = this;
+	/* `package` */ final NerdGenericGraphics<SketchPGraphicsT> GENERIC_GRAPHICS;
 
 	// region `protected` fields.
 	protected final NerdSketch<SketchPGraphicsT> SKETCH;
-	protected final NerdWindowModule<SketchPGraphicsT> WINDOW;
+	protected final NerdWindowModule<SketchPGraphicsT> GENERIC_WINDOW;
 	protected final NerdScenesModule<SketchPGraphicsT> MANAGER;
 
 	// Non-generic:
@@ -51,7 +52,6 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	// region `private` fields.
 	private int startMillis;
 	private boolean donePreloading;
-	/* `package` */ NerdGenericGraphics<SketchPGraphicsT> genericGraphics;
 
 	// Start at `0`. "Who needs layers anyway?"
 	private final List<NerdLayer<SketchPGraphicsT>> LAYERS = new ArrayList<>(0);
@@ -67,15 +67,13 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	protected NerdScene(final NerdScenesModule<SketchPGraphicsT> p_sceneMan) {
 		this.MANAGER = p_sceneMan;
 		this.SKETCH = (NerdSketch<SketchPGraphicsT>) this.MANAGER.getSketch();
+		this.GENERIC_GRAPHICS = this.SKETCH.getNerdGenericGraphics();
 
+		this.STATE = new NerdSceneState();
 		this.ASSETS = new NerdAssetsModule(this.SKETCH);
 		this.INPUT = this.SKETCH.getNerdModule(NerdInputModule.class);
-		this.WINDOW = this.SKETCH.getNerdModule(NerdWindowModule.class);
 		this.DISPLAY = this.SKETCH.getNerdModule(NerdDisplayModule.class);
-		this.STATE = this.MANAGER.assignNerdSceneStateGivenCacheInfo(
-				(Class<NerdScene<SketchPGraphicsT>>) this.getClass());
-
-		this.genericGraphics = this.SKETCH.getNerdGenericGraphics();
+		this.GENERIC_WINDOW = this.SKETCH.getNerdModule(NerdWindowModule.class);
 	}
 
 	// region Queries.
@@ -84,16 +82,16 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 		return this.MANAGER.getTimesSceneLoaded((Class<NerdScene<SketchPGraphicsT>>) this.getClass());
 	}
 
-	public NerdSketch<SketchPGraphicsT> getSKETCH() {
+	public boolean hasCompletedPreload() {
+		return this.donePreloading;
+	}
+
+	public NerdSketch<SketchPGraphicsT> getSketch() {
 		return this.SKETCH;
 	}
 
 	public NerdGenericGraphics<SketchPGraphicsT> getGenericGraphics() {
-		return this.genericGraphics;
-	}
-
-	public boolean hasCompletedPreload() {
-		return this.donePreloading;
+		return this.GENERIC_GRAPHICS;
 	}
 
 	// region Time queries.
@@ -439,12 +437,12 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 			toRet.input = toRet.scene.INPUT;
 			toRet.sketch = toRet.scene.SKETCH;
 			toRet.assets = toRet.scene.ASSETS;
-			toRet.window = toRet.scene.WINDOW;
+			toRet.window = toRet.scene.GENERIC_WINDOW;
 			// toRet.CAMERA = toRet.SCENE.CAMERA;
 
 			toRet.manager = toRet.scene.MANAGER;
 			toRet.display = toRet.scene.DISPLAY;
-			toRet.genericGraphics = toRet.scene.genericGraphics;
+			toRet.genericGraphics = toRet.scene.GENERIC_GRAPHICS;
 		}
 
 		return toRet;
@@ -516,16 +514,16 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 
 		switch (this.MANAGER.scenesModuleSettings.drawFirstCaller) {
 			case SCENE -> {
-				this.genericGraphics.push();
+				this.GENERIC_GRAPHICS.push();
 				this.draw();
-				this.genericGraphics.pop();
+				this.GENERIC_GRAPHICS.pop();
 
 				for (final NerdLayer<SketchPGraphicsT> l : this.LAYERS)
 					if (l != null)
 						if (l.isActive()) {
-							this.genericGraphics.push();
+							this.GENERIC_GRAPHICS.push();
 							l.draw();
-							this.genericGraphics.pop();
+							this.GENERIC_GRAPHICS.pop();
 						}
 			}
 
@@ -533,14 +531,14 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 				for (final NerdLayer<SketchPGraphicsT> l : this.LAYERS)
 					if (l != null)
 						if (l.isActive()) {
-							this.genericGraphics.push();
+							this.GENERIC_GRAPHICS.push();
 							l.draw();
-							this.genericGraphics.pop();
+							this.GENERIC_GRAPHICS.pop();
 						}
 
-				this.genericGraphics.push();
+				this.GENERIC_GRAPHICS.push();
 				this.draw();
-				this.genericGraphics.pop();
+				this.GENERIC_GRAPHICS.pop();
 			}
 		}
 

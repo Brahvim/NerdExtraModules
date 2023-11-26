@@ -14,7 +14,7 @@ import com.brahvim.nerd.utils.NerdByteSerialUtils;
 
 public class NerdSceneState {
 
-	private final HashMap<String, Serializable> DATA = new HashMap<>(0);
+	/* `package` */ final HashMap<String, Serializable> DATA = new HashMap<>(0);
 
 	// region From `HashMap`.
 	public void clear() {

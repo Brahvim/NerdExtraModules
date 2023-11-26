@@ -499,7 +499,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 			return;
 
 		final NerdScene<SketchPGraphicsT> toUse = this
-				.constructScene(this.SCENE_CLASS_TO_CACHE_MAP.get(this.previousSceneClass).CONSTRUCTOR);
+				.constructAndInitScene(this.SCENE_CLASS_TO_CACHE_MAP.get(this.previousSceneClass).CONSTRUCTOR);
 		this.setScene(toUse, p_setupState);
 	}
 
@@ -633,6 +633,12 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 		// (For the JVM, not us 😅)
 	}
 
+	/**
+	 * {@linkplain NerdScenesModule
+	 * NerdScenesModule:}<wbr>{@linkplain NerdScenesModule#cacheScene(Class)
+	 * :cacheScene(final Class<&quest; extends NerdScene<SketchPGraphicsT>>
+	 * sceneClass)}
+	 */
 	protected void cacheScene(
 			final Class<? extends NerdScene<SketchPGraphicsT>> p_sceneClass
 	/**//* , final boolean p_isDeletable */) {
@@ -640,8 +646,8 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 			return;
 
 		final Constructor<? extends NerdScene<SketchPGraphicsT>> sceneConstructor = this
-				.getSceneConstructor(p_sceneClass);
-		final NerdScene<SketchPGraphicsT> constructedScene = this.constructScene(sceneConstructor);
+				.getSceneConstructor(p_sceneClass); // Yes, this IS used later!
+		final NerdScene<SketchPGraphicsT> constructedScene = this.constructAndInitScene(sceneConstructor);
 
 		if (constructedScene == null)
 			throw new IllegalStateException(
@@ -665,16 +671,21 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 		}
 	}
 
-	protected NerdScene<SketchPGraphicsT> constructScene(
+	protected NerdScene<SketchPGraphicsT> constructAndInitScene(
 			final Constructor<? extends NerdScene<SketchPGraphicsT>> p_sceneConstructor) {
-		if (p_sceneConstructor == null) // Won't ever be so, since this class is tightly packed!
-			return null; // ...Checking anyway.
+
+		if (p_sceneConstructor == null) // Shouldn't ever be!
+			throw new IllegalStateException("""
+					An unknown error ocurred during the construction of a `NerdScene`.
+					Try declaring this subclass of `NerdScene` as public, with a
+					public constructor and only a `NerdScenesModule` argument.
+					Said class must not be an anonymous or inner class.""");
 
 		NerdScene<SketchPGraphicsT> toRet = null;
 
 		// region Get an instance if possible!
 		try {
-			p_sceneConstructor.setAccessible(true);
+			p_sceneConstructor.setAccessible(true); // NOSONAR
 			toRet = p_sceneConstructor.newInstance(this);
 			p_sceneConstructor.setAccessible(false);
 		} catch (final InstantiationException | IllegalAccessException
@@ -687,24 +698,25 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 		// endregion
 
 		// Shouldn't be `null`, since we handling practically every case causing this.
-		// if (toRet == null)
-		// throw new IllegalStateException("`NerdScenesModule::constructScene()`
-		// returned `null`!");
+		if (toRet == null)
+			throw new IllegalStateException("`NerdScenesModule::constructScene()` returned `null`!");
 
-		return toRet;
-	}
+		final Class<? extends NerdScene<SketchPGraphicsT>> sceneClass = p_sceneConstructor.getDeclaringClass();
+		final NerdScenesModuleSceneCache<SketchPGraphicsT> sceneCache = this.SCENE_CLASS_TO_CACHE_MAP.get(sceneClass);
 
-	protected NerdSceneState assignNerdSceneStateGivenCacheInfo(
-			final Class<? extends NerdScene<SketchPGraphicsT>> p_sceneClass) {
-		final NerdScenesModuleSceneCache<SketchPGraphicsT> sceneCache = this.SCENE_CLASS_TO_CACHE_MAP.get(p_sceneClass);
-
-		if (sceneCache != null)
-			return sceneCache.STATE;
+		if (sceneCache != null) {
+			toRet.STATE.DATA.putAll(sceneCache.STATE.DATA);
+			return toRet;
+		}
 
 		// If this is the first time we're constructing this scene,
 		// ensure it has a cache and a saved state!
-		this.cacheScene(p_sceneClass);
-		return new NerdSceneState();
+		this.SCENE_CLASS_TO_CACHE_MAP.put(
+				sceneClass,
+				new NerdScenesModuleSceneCache<>(p_sceneConstructor, toRet));
+		toRet.STATE.clear();
+
+		return toRet;
 	}
 
 	// Yes, this checks for errors.
@@ -712,7 +724,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 			final Class<? extends NerdScene<SketchPGraphicsT>> p_sceneClass,
 			final NerdSceneState p_state) {
 		this.setScene(
-				this.constructScene(
+				this.constructAndInitScene(
 						this.getSceneConstructor(p_sceneClass)),
 				p_state);
 	}
