@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,24 +28,24 @@ import processing.core.PGraphics;
 /**
  * <h2>Do not use as an anonymous class!</h2>
  * <i>...or run in another thread.</i>
+ * <p>
  * This stuff is initialized by the {@link NerdScenesModule} via reflection.
  * <h5><i>Always extend!</i></h5>
  */
 public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 
 	public final NerdScene<SketchPGraphicsT> SCENE = this;
-	public final Set<Runnable> SCENE_INIT_CALLBACKS = new LinkedHashSet<>(1);
 
 	// region `protected` fields.
-	protected NerdSketch<SketchPGraphicsT> sketch;
-	protected NerdWindowModule<SketchPGraphicsT> window;
-	protected NerdScenesModule<SketchPGraphicsT> manager;
+	protected final NerdSketch<SketchPGraphicsT> SKETCH;
+	protected final NerdWindowModule<SketchPGraphicsT> WINDOW;
+	protected final NerdScenesModule<SketchPGraphicsT> MANAGER;
 
 	// Non-generic:
-	protected NerdSceneState state;
-	protected NerdInputModule input;
-	protected NerdAssetsModule assets;
-	protected NerdDisplayModule display;
+	protected final NerdSceneState STATE;
+	protected final NerdInputModule INPUT;
+	protected final NerdAssetsModule ASSETS;
+	protected final NerdDisplayModule DISPLAY;
 	// endregion
 
 	// region `private` fields.
@@ -64,18 +63,29 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	LAYER_CONSTRUCTORS = new HashMap<>(0);
 	// endregion
 
-	protected NerdScene() {
-		this.SCENE_INIT_CALLBACKS.forEach(Runnable::run);
+	@SuppressWarnings("unchecked")
+	protected NerdScene(final NerdScenesModule<SketchPGraphicsT> p_sceneMan) {
+		this.MANAGER = p_sceneMan;
+		this.SKETCH = (NerdSketch<SketchPGraphicsT>) this.MANAGER.getSketch();
+
+		this.ASSETS = new NerdAssetsModule(this.SKETCH);
+		this.INPUT = this.SKETCH.getNerdModule(NerdInputModule.class);
+		this.WINDOW = this.SKETCH.getNerdModule(NerdWindowModule.class);
+		this.DISPLAY = this.SKETCH.getNerdModule(NerdDisplayModule.class);
+		this.STATE = this.MANAGER.assignNerdSceneStateGivenCacheInfo(
+				(Class<NerdScene<SketchPGraphicsT>>) this.getClass());
+
+		this.genericGraphics = this.SKETCH.getNerdGenericGraphics();
 	}
 
 	// region Queries.
 	@SuppressWarnings("unchecked")
 	public int getTimesLoaded() {
-		return this.manager.getTimesSceneLoaded((Class<NerdScene<SketchPGraphicsT>>) this.getClass());
+		return this.MANAGER.getTimesSceneLoaded((Class<NerdScene<SketchPGraphicsT>>) this.getClass());
 	}
 
-	public NerdSketch<SketchPGraphicsT> getSketch() {
-		return this.sketch;
+	public NerdSketch<SketchPGraphicsT> getSKETCH() {
+		return this.SKETCH;
 	}
 
 	public NerdGenericGraphics<SketchPGraphicsT> getGenericGraphics() {
@@ -92,7 +102,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	}
 
 	public int findMillisSinceStart() {
-		return this.sketch.millis() - this.startMillis;
+		return this.SKETCH.millis() - this.startMillis;
 	}
 	// endregion
 	// endregion
@@ -424,17 +434,17 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 		// endregion
 
 		if (toRet != null) {
-			toRet.SCENE = this;
-			toRet.state = toRet.SCENE.state;
-			toRet.input = toRet.SCENE.input;
-			toRet.sketch = toRet.SCENE.sketch;
-			toRet.assets = toRet.SCENE.assets;
-			toRet.window = toRet.SCENE.window;
+			toRet.scene = this;
+			toRet.state = toRet.scene.STATE;
+			toRet.input = toRet.scene.INPUT;
+			toRet.sketch = toRet.scene.SKETCH;
+			toRet.assets = toRet.scene.ASSETS;
+			toRet.window = toRet.scene.WINDOW;
 			// toRet.CAMERA = toRet.SCENE.CAMERA;
 
-			toRet.manager = toRet.SCENE.manager;
-			toRet.display = toRet.SCENE.display;
-			toRet.genericGraphics = toRet.SCENE.genericGraphics;
+			toRet.manager = toRet.scene.MANAGER;
+			toRet.display = toRet.scene.DISPLAY;
+			toRet.genericGraphics = toRet.scene.genericGraphics;
 		}
 
 		return toRet;
@@ -444,17 +454,17 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 
 	// region Anything callback-related, LOL.
 	/* `package` */ void runSetup(final NerdSceneState p_state) {
-		this.startMillis = this.sketch.millis();
+		this.startMillis = this.SKETCH.millis();
 		this.setup(p_state);
 	}
 
 	/* `package` */ synchronized void runPreload() {
 		this.preload();
-		this.assets.forceLoading();
+		this.ASSETS.forceLoading();
 
-		if (this.manager.scenesModuleSettings.ON_PRELOAD.useExecutors) {
+		if (this.MANAGER.scenesModuleSettings.ON_PRELOAD.useExecutors) {
 			final ThreadPoolExecutor executor = new ThreadPoolExecutor(
-					0, this.manager.scenesModuleSettings.ON_PRELOAD.maxExecutorThreads,
+					0, this.MANAGER.scenesModuleSettings.ON_PRELOAD.maxExecutorThreads,
 					10L, TimeUnit.SECONDS, new SynchronousQueue<>(),
 					new ThreadFactory() {
 						private static int threadCount = 1;
@@ -469,12 +479,12 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 						}
 					});
 
-			final Set<Future<?>> futures = new HashSet<>(this.assets.size());
-			this.assets.forEach(a -> futures.add(executor.submit(a::startLoading)));
+			final Set<Future<?>> futures = new HashSet<>(this.ASSETS.size());
+			this.ASSETS.forEach(a -> futures.add(executor.submit(a::startLoading)));
 			executor.shutdown(); // This tells the executor to stop accepting new tasks.
 
 			// If you must complete within this function, do that:
-			if (this.manager.scenesModuleSettings.ON_PRELOAD.completeAssetLoadingWithinPreload)
+			if (this.MANAGER.scenesModuleSettings.ON_PRELOAD.completeAssetLoadingWithinPreload)
 				try {
 					executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS); // Keep going, keep going...
 					// Can't simply cheat the implementation to make it wait forever!
@@ -483,7 +493,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 					Thread.currentThread().interrupt();
 				}
 		} else
-			this.assets.forEach(NerdAsset::startLoading);
+			this.ASSETS.forEach(NerdAsset::startLoading);
 
 		this.donePreloading = true;
 
@@ -493,22 +503,18 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 		this.sceneChanged();
 	}
 
-	/* `package` */ void runSceneRendererInit() {
-		this.sceneRendererInit();
-	}
-
 	/* `package` */ void runDispose() {
 		this.dispose();
 	}
 
 	/* `package` */ void runDraw() {
-		if (this.manager.scenesModuleSettings.drawFirstCaller == null)
-			this.manager.scenesModuleSettings.drawFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
+		if (this.MANAGER.scenesModuleSettings.drawFirstCaller == null)
+			this.MANAGER.scenesModuleSettings.drawFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
 
 		// To avoid asynchronous changes from causing repetition, we put both parts in
 		// `if` and `else` block.
 
-		switch (this.manager.scenesModuleSettings.drawFirstCaller) {
+		switch (this.MANAGER.scenesModuleSettings.drawFirstCaller) {
 			case SCENE -> {
 				this.genericGraphics.push();
 				this.draw();
@@ -541,13 +547,13 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	}
 
 	/* `package` */ void runPost() {
-		if (this.manager.scenesModuleSettings.postFirstCaller == null)
-			this.manager.scenesModuleSettings.postFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
+		if (this.MANAGER.scenesModuleSettings.postFirstCaller == null)
+			this.MANAGER.scenesModuleSettings.postFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
 
 		// To avoid asynchronous changes from causing repetition, we put both parts in
 		// `if` and `else` block.
 
-		switch (this.manager.scenesModuleSettings.preFirstCaller) {
+		switch (this.MANAGER.scenesModuleSettings.preFirstCaller) {
 			case SCENE -> {
 				this.post();
 
@@ -578,10 +584,10 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	}
 
 	/* `package` */ void runPre() {
-		if (this.manager.scenesModuleSettings.preFirstCaller == null)
-			this.manager.scenesModuleSettings.preFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.SCENE;
+		if (this.MANAGER.scenesModuleSettings.preFirstCaller == null)
+			this.MANAGER.scenesModuleSettings.preFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.SCENE;
 
-		switch (this.manager.scenesModuleSettings.preFirstCaller) {
+		switch (this.MANAGER.scenesModuleSettings.preFirstCaller) {
 			case SCENE -> {
 				this.pre();
 
@@ -621,13 +627,9 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 
 	/**
 	 * Callback for when the scene changes. Calling certain methods from
-	 * {@link NerdScene#manager} <i><b>will</b></i> cause crashes here!
+	 * {@link NerdScene#MANAGER} <i><b>will</b></i> cause crashes here!
 	 */
 	protected void sceneChanged() {
-	}
-
-	/** Called right before {@link NerdScene#setup(NerdSceneState)}! */
-	protected void sceneRendererInit() {
 	}
 
 	/**

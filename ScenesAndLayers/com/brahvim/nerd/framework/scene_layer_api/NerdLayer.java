@@ -27,7 +27,6 @@ public abstract class NerdLayer<SketchPGraphicsT extends PGraphics> {
 	protected NerdSketch<SketchPGraphicsT> sketch;
 	protected NerdWindowModule<SketchPGraphicsT> window;
 	protected NerdScenesModule<SketchPGraphicsT> manager;
-	protected NerdGenericGraphics<SketchPGraphicsT> genericGraphics;
 
 	// Non-generic ones:
 	protected NerdSceneState state;
@@ -35,8 +34,10 @@ public abstract class NerdLayer<SketchPGraphicsT extends PGraphics> {
 	protected NerdAssetsModule assets;
 	protected NerdDisplayModule display;
 
-	protected NerdScene<SketchPGraphicsT> SCENE;
+	protected NerdScene<SketchPGraphicsT> scene;
 	// endregion
+
+	/* `package` */ NerdGenericGraphics<SketchPGraphicsT> genericGraphics;
 
 	// region `private` fields.
 	private int timesActivated;
@@ -69,6 +70,10 @@ public abstract class NerdLayer<SketchPGraphicsT extends PGraphics> {
 			this.layerExit();
 	}
 	// endregion
+
+	public NerdGenericGraphics<SketchPGraphicsT> getGenericGraphics() {
+		return this.genericGraphics;
+	}
 
 	// region Events.
 	// region Mouse events.
