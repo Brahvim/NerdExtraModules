@@ -117,20 +117,21 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 	}
 	// endregion
 
-	// region Workflow callbacks (declared as `protected`).
-	@Override
-	protected void sketchConstructed(final NerdSketchSettings<?> p_settings) {
-		// super.SKETCH.getNerdModule(NerdScenesModule.class).addNewSceneStartedListener(()
-		// this.callOnAllSystems(NerdEcsSystem::sceneChanged);
-		// );
-	}
-
+	// region Workflow callbacks (*mostly* declared as `protected`).
 	// From `NerdScenesModule`:
+	// @TODO: Impl?!?!?!
 	@Override
 	public void sceneChanged(
 			final NerdScenesModule<?> p_scenesModule,
 			final Class<? extends NerdScene<?>> p_previousClass,
 			final Class<? extends NerdScene<?>> p_currentClass) {
+	}
+
+	@Override
+	protected void sketchConstructed(final NerdSketchSettings<?> p_settings) {
+		// super.SKETCH.getNerdModule(NerdScenesModule.class).addNewSceneStartedListener(()
+		// this.callOnAllSystems(NerdEcsSystem::sceneChanged);
+		// );
 	}
 
 	@Override
