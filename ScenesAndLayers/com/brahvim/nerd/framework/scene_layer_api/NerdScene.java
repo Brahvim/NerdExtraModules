@@ -613,8 +613,10 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	 *
 	 * <p>
 	 * Use this method for all asset-loading purposes that you would like to do in
-	 * the background. If {@link NerdScenesModule#loadSceneAssets()} or
-	 * {@link NerdScenesModule#loadSceneAssetsAsync} is called, this method is run
+	 * the background. If {@linkplain NerdScenesModule#loadSceneAssets()
+	 * NerdScenesModule::loadSceneAssets()} or
+	 * {@linkplain NerdScenesModule#loadSceneAssetsAsync()
+	 * NerdScenesModule::loadSceneAssetsAsync()} is called, this method is run
 	 * async, loading-in all {@link NerdAsset}s!
 	 * <p>
 	 * Since {@link NerdScene}s could be a part of the same {@link NerdSketch}, it
@@ -625,21 +627,26 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 
 	/**
 	 * Callback for when the scene changes. Calling certain methods from
-	 * {@link NerdScene#MANAGER} <i><b>will</b></i> cause crashes here!
+	 * {@linkplain NerdScene#MANAGER NerdScene::MANAGER} <i><b>will</b></i> cause
+	 * crashes here!
 	 */
 	protected void sceneChanged() {
 	}
 
 	/**
-	 * {@link NerdScene#setup()} is called when one of
-	 * {@link NerdScenesModule#startScene(Class)},
-	 * {@link NerdScenesModule#restartScene(Class)}, or
-	 * {@link NerdScenesModule#startPreviousScene(Class)}
+	 * {@linkplain NerdScene#setup() NerdScene::setup()} is called when one of
+	 * {@linkplain NerdScenesModule#startScene(Class)
+	 * NerdScenesModule::startScene(Class)},
+	 * {@linkplain NerdScenesModule#restartScene(Class)
+	 * NerdScenesModule::restartScene(Class)}, or
+	 * {@linkplain NerdScenesModule#startPreviousScene(Class)
+	 * NerdScenesModule::startPreviousScene(Class)}
 	 * is called, after the {@link NerdScene} finishes executing
-	 * {@link NerdScene#preload()},
+	 * {@linkplain NerdScene#preload() NerdScene::preload()},
 	 * <p>
-	 * {@link NerdLayer#setup()} is called <i>when a {@link NerdLayer} is set
-	 * active</i> using {@link NerdLayer#setActive(boolean)}.
+	 * {@linkplain NerdLayer#setup() NerdLayer::setup()} is called <i>when a
+	 * {@link NerdLayer} is set active</i> using
+	 * {@linkplain NerdLayer#setActive(boolean) NerdLayer::setActive(boolean)}.
 	 */
 	protected void setup(final NerdSceneState p_state) {
 	}
@@ -647,7 +654,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	protected void pre() {
 	}
 
-	public void draw() {
+	protected void draw() {
 	}
 
 	protected void post() {

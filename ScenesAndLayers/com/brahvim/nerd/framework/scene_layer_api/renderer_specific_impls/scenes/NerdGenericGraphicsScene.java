@@ -6,11 +6,11 @@ import com.brahvim.nerd.processing_wrapper.graphics_backends.NerdGenericGraphics
 
 import processing.core.PGraphics;
 
-public class NerdGenericScene extends NerdScene<PGraphics> {
+public class NerdGenericGraphicsScene extends NerdScene<PGraphics> {
 
     protected final NerdGenericGraphics<?> GRAPHICS;
 
-    protected NerdGenericScene(final NerdScenesModule<PGraphics> p_sceneMan) {
+    protected NerdGenericGraphicsScene(final NerdScenesModule<PGraphics> p_sceneMan) {
         super(p_sceneMan);
         this.GRAPHICS = super.getGenericGraphics();
     }

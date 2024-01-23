@@ -82,16 +82,13 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	protected boolean sceneSwitchOccurred;
 
 	/**
-	 * This {@link Map} contains cached data about each
-	 * {@link NerdScene<SketchPGraphicsT>} class
-	 * any {@link NerdScenesModule} instance has cached or ran.
+	 * This {@link Map} contains cached data about each {@link NerdScene} class any
+	 * {@link NerdScenesModule} instance has cached or ran.
 	 * <p>
-	 * Actual "caching" of a
-	 * {@link NerdScene<SketchPGraphicsT>} is when its
-	 * corresponding
-	 * {@link NerdScenesModuleSceneCache<SketchPGraphicsT>#cachedReference}
-	 * is not
-	 * {@code null}.
+	 * Actual "caching" of a {@link NerdScene} is when its corresponding
+	 * {@linkplain NerdScenesModule.NerdScenesModuleSceneCache#cachedReference
+	 * NerdScenesModule.NerdScenesModuleSceneCache::cachedReference}
+	 * is not{@code null}.
 	 * <p>
 	 * The initial capacity here ({@code 2}) is to aid performance, since, the JIT
 	 * does no optimization till the first scene switch. All scene switches after
@@ -399,8 +396,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 
 	/**
 	 * Removes a {@link NerdScenesModule.NerdScenesModuleNewSceneStartedListener}
-	 * that
-	 * would otherwise allow you to track when a scene starts.
+	 * that would otherwise allow you to track when a scene starts.
 	 *
 	 * @param p_listener is the listener you want to remove.
 	 */
@@ -411,7 +407,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 
 	/**
 	 * Returns a {@link HashSet} of
-	 * {@link NerdScene<SketchPGraphicsT>} classes
+	 * {@link NerdScene} classes
 	 * including only
 	 * classes
 	 * instances of which this {@link NerdScenesModule} has ran.
@@ -518,7 +514,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	 */
 
 	/**
-	 * Starts a {@link NerdScene<SketchPGraphicsT>}, and tells
+	 * Starts a {@link NerdScene}, and tells
 	 * using the return value,
 	 * whether it
 	 * was
@@ -602,7 +598,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 			p_scene.ASSETS.clear(); // Since the next operation is an addition, clear; else it won't be 'copying'!
 			p_scene.ASSETS.addAllAssetsFrom(assets);
 		} else { // Else, since we're supposed to run
-					// `NerdScene<SketchPGraphicsT>::preload()` each
+					// `NerdScene::preload()` each
 					// time, do
 					// that!:
 			p_scene.ASSETS.clear();

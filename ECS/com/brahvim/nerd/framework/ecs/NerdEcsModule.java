@@ -368,10 +368,11 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 	}
 
 	/**
-	 * You get this entire module, serialized to bytes!
+	 * You get the ECS's current state, serialized to bytes!
 	 *
 	 * @return The bytes!
-	 * @see NerdEcsModule#saveState(File)
+	 * @see {@linkplain NerdEcsModule#saveState(File)
+	 *      NerdEcsModule::saveState(File)}.
 	 */
 	public byte[] saveState() {
 		return NerdByteSerialUtils.toBytes(new NerdEcsModuleData(this));
@@ -381,7 +382,7 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 	 * This entire module, serialized to a file as bytes!
 	 *
 	 * @return Nothing! The file ate it all...
-	 * @see NerdEcsModule#saveState()
+	 * @see {@linkplain NerdEcsModule#saveState() NerdEcsModule::saveState()}
 	 */
 	public void saveState(final File p_file) {
 		NerdByteSerialUtils.toFile(new NerdEcsModuleData(this), p_file);
@@ -390,7 +391,8 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 
 	// region Loading.
 	/**
-	 * Ever called {@link NerdEcsModule#saveState(File)}? This reverses that.
+	 * Ever called {@linkplain NerdEcsModule#saveState(File)
+	 * NerdEcsModule::saveState(File)}? This reverses that.
 	 *
 	 * @param p_file is the file in context.
 	 */
@@ -399,7 +401,8 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 	}
 
 	/**
-	 * Ever called {@link NerdEcsModule#saveState()}? This reverses the bytes you
+	 * Ever called {@linkplain NerdEcsModule#saveState()
+	 * NerdEcsModule::saveState()}? This reverses the bytes you
 	 * got from there, for free!
 	 *
 	 * @param p_serializedData better have the bytes I talked about!

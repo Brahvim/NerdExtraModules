@@ -15,8 +15,8 @@ import processing.core.PGraphics;
  *
  * <p>
  * To add a {@link NerdLayer} to a {@link NerdScene}, use the
- * {@link NerdScene#addLayer(Class)}, passing in your {@link NerdLayer}
- * subclass.
+ * {@linkplain NerdScene#addLayer(Class) NerdScene::addLayer(Class)}, passing in
+ * your {@link NerdLayer} subclass.
  */
 public abstract class NerdLayer<SketchPGraphicsT extends PGraphics> {
 

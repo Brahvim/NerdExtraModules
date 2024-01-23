@@ -2,6 +2,7 @@ package com.brahvim.nerd.framework.scene_layer_api;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 
 import com.brahvim.nerd.processing_wrapper.NerdModuleSettings;
 import com.brahvim.nerd.processing_wrapper.NerdSketch;
@@ -14,17 +15,24 @@ public class NerdScenesModuleSettings extends NerdModuleSettings<NerdScenesModul
 	/**
 	 * Dictates to every {@link NerdScenesModule} instance, the order in which a
 	 * {@link NerdScene} or {@link NerdLayer} is allowed to call certain "workflow
-	 * events" ({@link NerdScene#pre()}, {@link NerdScene#draw()} and
-	 * {@link NerdScene#post()}) from Processing.
+	 * events" ({@linkplain NerdScene#pre() NerdScene::pre()},
+	 * {@linkplain NerdScene#draw() NerdScene::draw()} and
+	 * {@linkplain NerdScene#post() NerdScene::post()}) from Processing.
 	 *
-	 * @see {@link NerdScenesModuleSettings#preFirstCaller} -
-	 *      {@link NerdSceneLayerCallbackOrder#SCENE} by
+	 * @see {@linkplain NerdScenesModuleSettings#preFirstCaller
+	 *      NerdScenesModuleSettings::preFirstCaller}, which is
+	 *      {@linkplain NerdSceneLayerCallbackOrder#SCENE
+	 *      NerdSceneLayerCallbackOrder::SCENE} by
 	 *      default.
-	 * @see {@link NerdScenesModuleSettings#drawFirstCaller} -
-	 *      {@link NerdSceneLayerCallbackOrder#LAYER} by
+	 * @see {@linkplain NerdScenesModuleSettings#drawFirstCaller
+	 *      NerdScenesModuleSettings::drawFirstCaller}, which is
+	 *      {@linkplain NerdSceneLayerCallbackOrder#LAYER
+	 *      NerdSceneLayerCallbackOrder::LAYER} by
 	 *      default.
-	 * @see {@link NerdScenesModuleSettings#postFirstCaller} -
-	 *      {@link NerdSceneLayerCallbackOrder#LAYER} by
+	 * @see {@linkplain NerdScenesModuleSettings#postFirstCaller
+	 *      NerdScenesModuleSettings::postFirstCaller}, which is
+	 *      {@linkplain NerdSceneLayerCallbackOrder#LAYER
+	 *      NerdSceneLayerCallbackOrder::LAYER} by
 	 *      default.
 	 */
 	public /* `static` */ enum NerdSceneLayerCallbackOrder {
@@ -37,30 +45,33 @@ public class NerdScenesModuleSettings extends NerdModuleSettings<NerdScenesModul
 		}
 
 		/**
-		 * When {@code true}, {@link NerdScene#preload()} is run only the first time
-		 * a {@link NerdScene} class is used in the engine. Setting this to
-		 * {@code false} loads scene assets each time, so that assets are updated.
+		 * When {@code true}, {@linkplain NerdScene#preload() NerdScene::preload()} is
+		 * run only the first time a {@link NerdScene} class is used in the engine.
+		 * Setting this to {@code false} loads scene assets each time, so that assets
+		 * are updated.
 		 *
 		 * @apiNote {@code true} by default!
 		 */
 		public boolean preloadOnlyOnce = true;
 
 		/**
-		 * When {@code true}, {@link NerdScene#preload()} runs the loading process in
-		 * multiple threads using a {@link java.util.concurrent.ExecutorService}. If
-		 * {@link NerdScenesModuleSettings.OnScenePreload#completeAssetLoadingWithinPreload}
+		 * When {@code true}, {@linkplain NerdScene#preload() NerdScene::preload()} runs
+		 * the loading process in multiple threads using a {@link ExecutorService}. If
+		 * {@linkplain NerdScenesModuleSettings.OnScenePreload#completeAssetLoadingWithinPreload
+		 * NerdScenesModuleSettings.OnScenePreload::completeAssetLoadingWithinPreload}
 		 * is {@code true}, the asset loading is <i>guaranteed</i> to finish within
-		 * {@link NerdScene#preload()}.
+		 * {@linkplain NerdScene#preload() NerdScene::preload()}.
 		 *
 		 * @apiNote {@code true} by default!
 		 */
 		public boolean useExecutors = true;
 
 		/**
-		 * The maximum number of threads multithreaded asset loading started
-		 * in {@link NerdScene#preload()} can use. You may change whether that's the
-		 * case, by setting
-		 * {@link NerdScenesModuleSettings.OnScenePreload#useExecutors}
+		 * The maximum number of threads multithreaded asset loading started in
+		 * {@linkplain NerdScene#preload() NerdScene::preload()} can use. You may change
+		 * whether that's the case, by setting
+		 * {@linkplain NerdScenesModuleSettings.OnScenePreload#useExecutors
+		 * NerdScenesModuleSettings.OnScenePreload::useExecutors}
 		 * to {@code true} or {@code false}!
 		 *
 		 * @apiNote We use <b>{@code 6}</b> threads by default! Enough? Happy?
@@ -69,12 +80,12 @@ public class NerdScenesModuleSettings extends NerdModuleSettings<NerdScenesModul
 		public int maxExecutorThreads = 6;
 
 		/**
-		 * If
-		 * {@link NerdScenesModuleSettings.OnScenePreload#useExecutors}
-		 * is {@code true}, the asset loading process in {@link NerdScene#preload()} is
-		 * run using multiple threads. Setting <i>this</i> to {@code true}
-		 * <i>guarantees</i> that the asset loading will be finished within
-		 * {@link NerdScene#preload()}.
+		 * If {@linkplain NerdScenesModuleSettings.OnScenePreload#useExecutors
+		 * NerdScenesModuleSettings.OnScenePreload::useExecutors} is {@code true}, the
+		 * asset loading process in {@linkplain NerdScene#preload()
+		 * NerdScene::preload()} is run using multiple threads. Setting <i>this</i> to
+		 * {@code true} <i>guarantees</i> that the asset loading will be finished within
+		 * {@linkplain NerdScene#preload() NerdScene::preload()}.
 		 *
 		 * @apiNote {@code true} by default!
 		 */
@@ -88,23 +99,30 @@ public class NerdScenesModuleSettings extends NerdModuleSettings<NerdScenesModul
 		}
 
 		/**
-		 * If set to {@code -1}, will call {@link NerdSketch#clear()} and not
-		 * {@link NerdSketch#background()}. <b>This is the default behavior!</b>
+		 * If set to {@code -1}, will call {@linkplain NerdSketch#clear()
+		 * NerdSketch::clear()} and not
+		 * {@linkplain NerdSketch#background() NerdSketch::background()}. <br>
+		 * </br>
+		 * <b>This is the default behavior!</b>
 		 */
 		public int clearColor = -1;
 
 		/**
 		 * Clears the screen according to
-		 * {@link NerdScenesModuleSettings.OnSceneSwitch#clearColor}.
+		 * {@linkplain NerdScenesModuleSettings.OnSceneSwitch#clearColor
+		 * NerdScenesModuleSettings.OnSceneSwitch::clearColor}.
 		 *
 		 * @apiNote {@code false} by default.
 		 */
 		public boolean doClear = false;
 
 		/**
-		 * Resets {@link NerdScenesModuleSettings#preFirstCaller},
-		 * {@link NerdScenesModuleSettings#drawFirstCaller}, and
-		 * {@link NerdScenesModuleSettings#postFirstCaller} to their
+		 * Resets {@linkplain NerdScenesModuleSettings#preFirstCaller
+		 * NerdScenesModuleSettings::preFirstCaller},
+		 * {@linkplain NerdScenesModuleSettings#drawFirstCaller
+		 * NerdScenesModuleSettings::drawFirstCaller}, and
+		 * {@linkplain NerdScenesModuleSettings#postFirstCaller
+		 * NerdScenesModuleSettings::postFirstCaller} to their
 		 * default values!
 		 */
 		public boolean resetSceneLayerCallbackOrder = true;
@@ -117,26 +135,29 @@ public class NerdScenesModuleSettings extends NerdModuleSettings<NerdScenesModul
 
 	// region Callback order specifiers.
 	/**
-	 * Controls whether {@link NerdScene#pre()} or {@link NerdLayer#pre()} is
-	 * called first by the {@link NerdScenesModule}. If the value of this field is
-	 * ever {@code null}, it is set to its default,
-	 * {@link NerdSceneLayerCallbackOrder#SCENE}.
+	 * Controls whether {@linkplain NerdScene#pre() NerdScene::pre()} or
+	 * {@linkplain NerdLayer#pre() NerdLayer::pre()} is called first by the
+	 * {@link NerdScenesModule}. If the value of this field is ever {@code null}, it
+	 * is set to its default, {@linkplain NerdSceneLayerCallbackOrder#SCENE
+	 * NerdSceneLayerCallbackOrder::SCENE}.
 	 */
 	public NerdScenesModuleSettings.NerdSceneLayerCallbackOrder preFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.SCENE;
 
 	/**
-	 * Controls whether {@link NerdScene#draw()} or {@link NerdLayer#draw()} is
-	 * called first by the {@link NerdScenesModule}. If the value of this field is
-	 * ever{@code null}, it is set to its default,
-	 * {@link NerdSceneLayerCallbackOrder#LAYER}.
+	 * Controls whether {@linkplain NerdScene#draw() NerdScene::draw()} or
+	 * {@linkplain NerdLayer#draw() NerdLayer::draw()} is called first by the
+	 * {@link NerdScenesModule}. If the value of this field is ever{@code null}, it
+	 * is set to its default, {@linkplain NerdSceneLayerCallbackOrder#LAYER
+	 * NerdSceneLayerCallbackOrder::LAYER}.
 	 */
 	public NerdScenesModuleSettings.NerdSceneLayerCallbackOrder drawFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
 
 	/**
-	 * Controls whether {@link NerdScene#post()} or {@link NerdLayer#post()} is
-	 * called first by the {@link NerdScenesModule}. If the value of this field is
-	 * ever {@code null}, it is set to its default,
-	 * {@link NerdSceneLayerCallbackOrder#LAYER}.
+	 * Controls whether {@linkplain NerdScene#post() NerdScene::post()} or
+	 * {@linkplain NerdLayer#post() NerdLayer::post()} is called first by the
+	 * {@link NerdScenesModule}. If the value of this field is ever {@code null}, it
+	 * is set to its default, {@linkplain NerdSceneLayerCallbackOrder#LAYER
+	 * NerdSceneLayerCallbackOrder::LAYER}.
 	 */
 	public NerdScenesModuleSettings.NerdSceneLayerCallbackOrder postFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
 	// endregion
