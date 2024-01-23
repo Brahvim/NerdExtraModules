@@ -168,4 +168,9 @@ public class NerdScenesModuleSettings extends NerdModuleSettings<NerdScenesModul
 		this.FIRST_SCENE_CLASS = p_firstSceneClass;
 	}
 
+	@Override
+	public Class<NerdScenesModule> getModuleClass() {
+		return NerdScenesModule.class;
+	}
+
 }
