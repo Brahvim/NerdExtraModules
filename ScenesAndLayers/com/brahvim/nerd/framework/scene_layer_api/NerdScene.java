@@ -59,8 +59,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	// in *insertion order*, but have no `indexOf()` method!
 
 	private final Map<Class<? extends NerdLayer<SketchPGraphicsT>>, Constructor<? extends NerdLayer<SketchPGraphicsT>>>
-	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	LAYER_CONSTRUCTORS = new HashMap<>(0);
+	/*   */ LAYER_CONSTRUCTORS = new HashMap<>(0);
 	// endregion
 
 	@SuppressWarnings("unchecked")
