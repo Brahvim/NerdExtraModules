@@ -7,8 +7,8 @@ import java.util.concurrent.ExecutorService;
 import com.brahvim.nerd.processing_wrapper.NerdModuleSettings;
 import com.brahvim.nerd.processing_wrapper.NerdSketch;
 
-@SuppressWarnings("rawtypes")
-public class NerdScenesModuleSettings extends NerdModuleSettings<NerdScenesModule> {
+// @SuppressWarnings("rawtypes")
+public class NerdScenesModuleSettings extends NerdModuleSettings<NerdScenesModule<?>> {
 
 	public final Class<? extends NerdScene<?>> FIRST_SCENE_CLASS;
 
@@ -169,8 +169,9 @@ public class NerdScenesModuleSettings extends NerdModuleSettings<NerdScenesModul
 	}
 
 	@Override
-	public Class<NerdScenesModule> getModuleClass() {
-		return NerdScenesModule.class;
+	@SuppressWarnings("unchecked")
+	public <RetModuleClassT extends NerdScenesModule<?>> Class<RetModuleClassT> getModuleClass() {
+		return (Class<RetModuleClassT>) NerdScenesModule.class;
 	}
 
 }
