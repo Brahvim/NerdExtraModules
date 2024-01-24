@@ -8,6 +8,8 @@ import processing.opengl.PGraphics3D;
 
 public abstract class NerdP3dScene extends NerdScene<PGraphics3D> {
 
+    // TODO Get renderer-specific windows module instances!
+
     protected final NerdP3dGraphics GRAPHICS;
 
     protected NerdP3dScene(final NerdScenesModule<PGraphics3D> p_sceneMan) {

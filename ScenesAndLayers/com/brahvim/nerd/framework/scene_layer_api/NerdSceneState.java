@@ -2,8 +2,10 @@ package com.brahvim.nerd.framework.scene_layer_api;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -14,7 +16,8 @@ import com.brahvim.nerd.utils.NerdByteSerialUtils;
 
 public class NerdSceneState {
 
-	/* `package` */ final HashMap<String, Serializable> DATA = new HashMap<>(0);
+	protected final HashMap<String, Serializable> DATA = new HashMap<>(0);
+	protected final List<String> IMMUTABLE_KEYS = new ArrayList<>(0);
 
 	// region From `HashMap`.
 	public void clear() {
@@ -96,10 +99,35 @@ public class NerdSceneState {
 	 * If an object with the given key is already saved, it is updated.
 	 * <p>
 	 * Else, a new key-value pair is created and saved.
+	 * <p>
+	 * If a key is made immutable with
+	 * {@linkplain NerdSceneState#setImmutable(String, Serializable)
+	 * NerdSceneState::setImmutable(String, Serializable)}, calling this method has
+	 * no effects.
 	 */
 	public NerdSceneState set(final String p_key, final Serializable p_value) {
+		if (!this.isKeyMutable(p_key))
+			return this;
+
 		this.DATA.put(p_key, p_value);
 		return this;
+	}
+
+	/**
+	 * If an object with the given key is already saved, it is updated.
+	 * <p>
+	 * Else, a new key-value pair is created and saved.
+	 * <p>
+	 * Values put using this method are immutable till removed!
+	 */
+	public NerdSceneState setImmutable(final String p_key, final Serializable p_value) {
+		this.DATA.put(p_key, p_value);
+		this.IMMUTABLE_KEYS.add(p_key);
+		return this;
+	}
+
+	public boolean isKeyMutable(final String p_key) {
+		return this.IMMUTABLE_KEYS.contains(p_key);
 	}
 
 	@SuppressWarnings("unchecked")

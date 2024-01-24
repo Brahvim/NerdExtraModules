@@ -12,7 +12,7 @@ public abstract class NerdEcsComponentPacket<PacketComponentT extends NerdEcsCom
 
 	private long versionNumber;
 
-	protected NerdEcsComponentPacket() {
+	public NerdEcsComponentPacket() { // NOSONAR
 	}
 
 	protected NerdEcsComponentPacket(final PacketComponentT p_component) {

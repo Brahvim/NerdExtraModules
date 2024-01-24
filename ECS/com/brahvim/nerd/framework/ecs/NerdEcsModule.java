@@ -15,7 +15,7 @@ import com.brahvim.nerd.framework.scene_layer_api.NerdScene;
 import com.brahvim.nerd.framework.scene_layer_api.NerdScenesModule;
 import com.brahvim.nerd.framework.scene_layer_api.NerdScenesModule.NerdScenesModuleNewSceneStartedListener;
 import com.brahvim.nerd.io.net.NerdUdpSocket;
-import com.brahvim.nerd.io.net.tcp.NerdTcpServer;
+import com.brahvim.nerd.io.net.tcp.implementations.no_ssl.NerdTcpNoSslServer;
 import com.brahvim.nerd.processing_wrapper.NerdModule;
 import com.brahvim.nerd.processing_wrapper.NerdModuleSettings;
 import com.brahvim.nerd.processing_wrapper.NerdSketch;
@@ -427,8 +427,8 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 			final LinkedList<?> otherList = (LinkedList<?>) e.getValue();
 
 			for (int i = myList.size() - 1; i > -1; i--) {
-				final Object o = myList.get(i);
-				if (!otherList.contains(o))
+				final Object o = myList.get(i); // This is why I used a `LinkedList`.
+				if (!otherList.contains(o)) // It's possible to remove stuff concurrently.
 					myList.remove(o);
 			}
 		}
@@ -469,7 +469,7 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 	// endregion
 
 	// region Networking.
-	public void startSocket(final Class<NerdTcpServer> p_socketType, final String p_ip, final int p_port) {
+	public void startSocket(final Class<NerdTcpNoSslServer> p_socketType, final String p_ip, final int p_port) {
 	}
 
 	public void startSocket(final Class<NerdUdpSocket> p_socketType) {

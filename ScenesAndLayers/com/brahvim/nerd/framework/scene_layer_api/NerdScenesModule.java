@@ -695,7 +695,9 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 
 		// Shouldn't be `null`, since we handling practically every case causing this.
 		if (toRet == null)
-			throw new IllegalStateException("`NerdScenesModule::constructScene()` returned `null`!");
+			throw new IllegalStateException("""
+					`NerdScenesModule::constructScene()` returned `null`!
+					Please check if your sketch and scene's rendering backends match.""");
 
 		final Class<? extends NerdScene<SketchPGraphicsT>> sceneClass = p_sceneConstructor.getDeclaringClass();
 		final NerdScenesModuleSceneCache<SketchPGraphicsT> sceneCache = this.SCENE_CLASS_TO_CACHE_MAP.get(sceneClass);
