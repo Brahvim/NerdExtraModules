@@ -339,13 +339,12 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	public <RetT extends NerdLayer<SketchPGraphicsT>> RetT addLayer(
 			final Class<RetT> p_layerClass) {
 		if (p_layerClass == null)
-			throw new NullPointerException(
-					"You weren't supposed to pass `null` into `NerdScene::startLayer()`.");
+			throw new NullPointerException("You weren't supposed to pass `null` into `NerdScene::startLayer()`.");
 
-		// We allow multiple layer instances, by the way.
-
-		final Constructor<? extends NerdLayer<SketchPGraphicsT>> layerConstructor = this
-				.getLayerConstructor(p_layerClass);
+		// We allow multiple layer instances, by the way!
+		final Constructor<? extends NerdLayer<SketchPGraphicsT>>
+		/*   */ layerConstructor = this.getLayerConstructor(p_layerClass);
+		// ^^^ This is a separate declaration to allow better debugging.
 		final NerdLayer<SketchPGraphicsT> toRet = this.constructLayer(layerConstructor);
 
 		if (toRet == null)

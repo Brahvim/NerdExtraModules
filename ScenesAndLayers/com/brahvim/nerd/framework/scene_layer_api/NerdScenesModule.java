@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import com.brahvim.nerd.framework.scene_layer_api.renderer_specific_impls.scenes.NerdGenericGraphicsScene;
 import com.brahvim.nerd.io.asset_loader.NerdAssetsModule;
 import com.brahvim.nerd.processing_wrapper.NerdModule;
 import com.brahvim.nerd.processing_wrapper.NerdModuleSettings;
@@ -407,10 +406,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	}
 
 	/**
-	 * Returns a {@link HashSet} of
-	 * {@link NerdScene} classes
-	 * including only
-	 * classes
+	 * Returns a {@link HashSet} of {@link NerdScene} classes including only classes
 	 * instances of which this {@link NerdScenesModule} has ran.
 	 */
 	public final Set<Class<? extends NerdScene<?>>> getKnownScenesSet() {
@@ -500,29 +496,12 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 		this.setScene(toUse, p_setupState);
 	}
 
-	// "Cache if not cached" / "Start cached" method.
-	// Used to experience these (now solved!) problems:
-	/*
-	 * - Asking for deletion permissions when you may not be caching is awkward,
-	 * - Structure. `cache == null`, `cache.getCache() == null` must result in the
-	 * same, but can't be grouped together logically, for optimization. This can be
-	 * fixed with the use of an implementation method, but this class already has
-	 * too many similarly-named methods!
-	 *
-	 * Another approach would be to call `NerdSceneModule::cacheScene()` then query
-	 * `NerdSceneModule::SCENE_CACHE`, but that sounds even slower.
-	 * Even with the JIT!
-	 */
-
 	/**
-	 * Starts a {@link NerdScene}, and tells
-	 * using the return value,
-	 * whether it
-	 * was
+	 * Starts a {@link NerdScene}, and tells using the return value, whether it was
 	 * restored from cache or started again.
 	 */
 	public boolean startScene(
-			final Class<? extends NerdGenericGraphicsScene> p_sceneClass) {
+			final Class<? extends NerdScene<SketchPGraphicsT>> p_sceneClass) {
 		return this.startScene(p_sceneClass, null);
 	}
 
@@ -541,18 +520,6 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 			this.startSceneImpl(p_sceneClass, p_setupState);
 			return false;
 		}
-
-		/*
-		 * // This is where `HashSet`s shine more than `ArrayList`s!:
-		 * if (this.SCENE_CLASSES.add(p_sceneClass))
-		 * this.startSceneImpl(p_sceneClass);
-		 * else
-		 * throw new IllegalArgumentException("""
-		 * Use `SceneModule::restartScene()
-		 * to restart a `NerdScene<SketchPGraphicsT>` while it
-		 * runs!""");
-		 */
-
 	}
 	// endregion
 
@@ -579,8 +546,8 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 			return;
 		}
 
-		final Class<? extends NerdScene<SketchPGraphicsT>> sceneClass = (Class<NerdScene<SketchPGraphicsT>>) p_scene
-				.getClass();
+		final Class<? extends NerdScene<SketchPGraphicsT>> sceneClass
+		/*   */ = (Class<NerdScene<SketchPGraphicsT>>) p_scene.getClass();
 
 		// If this scene has never been loaded up before, preload the data!
 		if (this.getTimesSceneLoaded(sceneClass) == 0) {
