@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import com.brahvim.nerd.framework.scene_layer_api.renderer_specific_impls.scenes.NerdGenericGraphicsScene;
 import com.brahvim.nerd.io.asset_loader.NerdAssetsModule;
 import com.brahvim.nerd.processing_wrapper.NerdModule;
 import com.brahvim.nerd.processing_wrapper.NerdModuleSettings;
@@ -521,7 +522,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	 * restored from cache or started again.
 	 */
 	public boolean startScene(
-			final Class<? extends NerdScene<SketchPGraphicsT>> p_sceneClass) {
+			final Class<? extends NerdGenericGraphicsScene> p_sceneClass) {
 		return this.startScene(p_sceneClass, null);
 	}
 

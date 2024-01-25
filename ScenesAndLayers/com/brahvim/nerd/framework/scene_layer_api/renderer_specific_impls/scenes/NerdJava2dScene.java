@@ -10,8 +10,8 @@ import processing.awt.PGraphicsJava2D;
 
 public abstract class NerdJava2dScene extends NerdScene<PGraphicsJava2D> {
 
-    protected final NerdJava2dGraphics GRAPHICS;
-    protected final NerdJava2dWindowModule WINDOW;
+    public final NerdJava2dGraphics GRAPHICS;
+    public final NerdJava2dWindowModule WINDOW;
 
     protected NerdJava2dScene(final NerdScenesModule<PGraphicsJava2D> p_sceneMan) {
         super(p_sceneMan);

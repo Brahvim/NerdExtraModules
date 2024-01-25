@@ -10,8 +10,8 @@ import processing.javafx.PGraphicsFX2D;
 
 public class NerdFx2dLayer extends NerdLayer<PGraphicsFX2D> {
 
-    protected final NerdFx2dGraphics GRAPHICS;
-    protected final NerdFx2dWindowModule WINDOW;
+    public final NerdFx2dGraphics GRAPHICS;
+    public final NerdFx2dWindowModule WINDOW;
 
     protected NerdFx2dLayer(final NerdScene<PGraphicsFX2D> p_scene) {
         super(p_scene);

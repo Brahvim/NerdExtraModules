@@ -12,8 +12,8 @@ public abstract class NerdP3dScene extends NerdScene<PGraphics3D> {
 
     // TODO Get renderer-specific windows module instances!
 
-    protected final NerdP3dGraphics GRAPHICS;
-    protected final NerdGlWindowModule WINDOW;
+    public final NerdP3dGraphics GRAPHICS;
+    public final NerdGlWindowModule WINDOW;
 
     protected NerdP3dScene(final NerdScenesModule<PGraphics3D> p_sceneMan) {
         super(p_sceneMan);
