@@ -24,27 +24,36 @@ public abstract class NerdLayer<SketchPGraphicsT extends PGraphics> {
 	// Seriously, why did I set these to be `protected`?
 	public final NerdLayer<SketchPGraphicsT> LAYER = this;
 
-	protected NerdSketch<SketchPGraphicsT> sketch;
-	protected NerdWindowModule<SketchPGraphicsT> window;
-	protected NerdScenesModule<SketchPGraphicsT> manager;
+	protected final NerdSketch<SketchPGraphicsT> SKETCH;
+	protected final NerdWindowModule<SketchPGraphicsT> GENERIC_WINDOW;
+	protected final NerdScenesModule<SketchPGraphicsT> MANAGER;
 
 	// Non-generic ones:
-	protected NerdSceneState state;
-	protected NerdInputModule input;
-	protected NerdAssetsModule assets;
-	protected NerdDisplayModule display;
+	protected final NerdSceneState STATE;
+	protected final NerdInputModule INPUT;
+	protected final NerdAssetsModule ASSETS;
+	protected final NerdDisplayModule DISPLAY;
 
-	protected NerdScene<SketchPGraphicsT> scene;
+	protected final NerdScene<SketchPGraphicsT> SCENE;
 	// endregion
 
-	/* `package` */ NerdGenericGraphics<SketchPGraphicsT> genericGraphics;
+	protected final NerdGenericGraphics<SketchPGraphicsT> GENERIC_GRAPHICS;
 
 	// region `private` fields.
 	private int timesActivated;
 	private boolean active;
 	// endregion
 
-	protected NerdLayer() {
+	protected NerdLayer(final NerdScene<SketchPGraphicsT> p_scene) {
+		this.SCENE = p_scene;
+		this.STATE = this.SCENE.STATE;
+		this.INPUT = this.SCENE.INPUT;
+		this.SKETCH = this.SCENE.SKETCH;
+		this.ASSETS = this.SCENE.ASSETS;
+		this.DISPLAY = this.SCENE.DISPLAY;
+		this.MANAGER = this.SCENE.MANAGER;
+		this.GENERIC_WINDOW = this.SCENE.GENERIC_WINDOW;
+		this.GENERIC_GRAPHICS = this.SCENE.GENERIC_GRAPHICS;
 	}
 
 	// region Activity status.
@@ -62,18 +71,14 @@ public abstract class NerdLayer<SketchPGraphicsT extends PGraphics> {
 
 		if (this.active && !previouslyActive) {
 			if (this.timesActivated == 0)
-				this.layerRendererInit();
+				this.layerActivated();
 
 			this.setup();
 			this.timesActivated++;
 		} else
-			this.layerExit();
+			this.layerDeactivated();
 	}
 	// endregion
-
-	public NerdGenericGraphics<SketchPGraphicsT> getGenericGraphics() {
-		return this.genericGraphics;
-	}
 
 	// region Events.
 	// region Mouse events.
@@ -137,14 +142,11 @@ public abstract class NerdLayer<SketchPGraphicsT extends PGraphics> {
 	protected void fullscreenChanged(final boolean p_state) {
 	}
 	// endregion
-	// endregion
 
-	// region `protected` methods. Nobody can call them outside of this package!
-	// region `NerdLayer`-only (`protected`) callbacks!
-	protected void layerRendererInit() {
+	protected void layerActivated() {
 	}
 
-	protected void layerExit() {
+	protected void layerDeactivated() {
 	}
 	// endregion
 
@@ -160,7 +162,6 @@ public abstract class NerdLayer<SketchPGraphicsT extends PGraphics> {
 
 	protected void post() {
 	}
-	// endregion
 	// endregion
 
 }

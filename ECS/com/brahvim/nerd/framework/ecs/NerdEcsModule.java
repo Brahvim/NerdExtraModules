@@ -243,7 +243,7 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 
 			NerdEcsSystem<? extends NerdEcsComponent> system = null;
 			try {
-				system = systemClass.getConstructor().newInstance();
+				system = systemClass.getDeclaredConstructor().newInstance();
 			} catch (final InstantiationException | IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
 				e.printStackTrace();

@@ -165,7 +165,7 @@ public final class NerdEcsEntity implements Serializable {
 
 		// region Construction!
 		try {
-			toRet = p_componentClass.getConstructor().newInstance();
+			toRet = p_componentClass.getDeclaredConstructor().newInstance();
 		} catch (final InstantiationException | SecurityException | IllegalArgumentException
 				| InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
 			e.printStackTrace();

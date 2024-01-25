@@ -35,12 +35,12 @@ import processing.core.PGraphics;
 public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 
 	public final NerdScene<SketchPGraphicsT> SCENE = this;
-	/* `package` */ final NerdGenericGraphics<SketchPGraphicsT> GENERIC_GRAPHICS;
 
 	// region `protected` fields.
 	protected final NerdSketch<SketchPGraphicsT> SKETCH;
-	protected final NerdWindowModule<SketchPGraphicsT> GENERIC_WINDOW;
 	protected final NerdScenesModule<SketchPGraphicsT> MANAGER;
+	protected final NerdWindowModule<SketchPGraphicsT> GENERIC_WINDOW;
+	protected final NerdGenericGraphics<SketchPGraphicsT> GENERIC_GRAPHICS;
 
 	// Non-generic:
 	protected final NerdSceneState STATE;
@@ -393,13 +393,13 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	// region `NerdLayer` construction.
 	private Constructor<? extends NerdLayer<SketchPGraphicsT>> getLayerConstructor(
 			final Class<? extends NerdLayer<SketchPGraphicsT>> p_layerClass) {
-		Constructor<? extends NerdLayer<SketchPGraphicsT>> toRet = this.LAYER_CONSTRUCTORS
-				.get(p_layerClass);
+		Constructor<? extends NerdLayer<SketchPGraphicsT>> toRet
+		/*   */ = this.LAYER_CONSTRUCTORS.get(p_layerClass);
 		if (toRet != null)
 			return toRet;
 
 		try {
-			toRet = p_layerClass.getConstructor();
+			toRet = p_layerClass.getDeclaredConstructor(NerdScene.class);
 		} catch (final NoSuchMethodException e) {
 			System.err.println("""
 					Every subclass of `NerdLayer` must be `public` with a `public` "null-constructor"
@@ -421,7 +421,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 
 		// region Construct `toRet`.
 		try {
-			toRet = p_layerConstructor.newInstance();
+			toRet = p_layerConstructor.newInstance(this);
 		} catch (final InstantiationException
 				| IllegalAccessException
 				| IllegalArgumentException
@@ -429,20 +429,6 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 			e.printStackTrace();
 		}
 		// endregion
-
-		if (toRet != null) {
-			toRet.scene = this;
-			toRet.state = toRet.scene.STATE;
-			toRet.input = toRet.scene.INPUT;
-			toRet.sketch = toRet.scene.SKETCH;
-			toRet.assets = toRet.scene.ASSETS;
-			toRet.window = toRet.scene.GENERIC_WINDOW;
-			// toRet.CAMERA = toRet.SCENE.CAMERA;
-
-			toRet.manager = toRet.scene.MANAGER;
-			toRet.display = toRet.scene.DISPLAY;
-			toRet.genericGraphics = toRet.scene.GENERIC_GRAPHICS;
-		}
 
 		return toRet;
 	}
