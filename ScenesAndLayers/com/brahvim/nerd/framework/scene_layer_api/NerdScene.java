@@ -336,8 +336,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	 * }
 	 */
 
-	public <RetT extends NerdLayer<SketchPGraphicsT>> RetT addLayer(
-			final Class<RetT> p_layerClass) {
+	public <RetT extends NerdLayer<SketchPGraphicsT>> RetT addLayer(final Class<RetT> p_layerClass) {
 		if (p_layerClass == null)
 			throw new NullPointerException("You weren't supposed to pass `null` into `NerdScene::startLayer()`.");
 
@@ -420,7 +419,9 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 
 		// region Construct `toRet`.
 		try {
+			p_layerConstructor.setAccessible(true); // NOSONAR
 			toRet = p_layerConstructor.newInstance(this);
+			p_layerConstructor.setAccessible(false);
 		} catch (final InstantiationException
 				| IllegalAccessException
 				| IllegalArgumentException

@@ -492,7 +492,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 			return;
 
 		final NerdScene<SketchPGraphicsT> toUse = this
-				.constructAndInitScene(this.SCENE_CLASS_TO_CACHE_MAP.get(this.previousSceneClass).CONSTRUCTOR);
+				.constructScene(this.SCENE_CLASS_TO_CACHE_MAP.get(this.previousSceneClass).CONSTRUCTOR);
 		this.setScene(toUse, p_setupState);
 	}
 
@@ -611,7 +611,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 
 		final Constructor<? extends NerdScene<SketchPGraphicsT>> sceneConstructor = this
 				.getSceneConstructor(p_sceneClass); // Yes, this IS used later!
-		final NerdScene<SketchPGraphicsT> constructedScene = this.constructAndInitScene(sceneConstructor);
+		final NerdScene<SketchPGraphicsT> constructedScene = this.constructScene(sceneConstructor);
 
 		if (constructedScene == null)
 			throw new IllegalStateException(
@@ -635,7 +635,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 		}
 	}
 
-	protected NerdScene<SketchPGraphicsT> constructAndInitScene(
+	protected NerdScene<SketchPGraphicsT> constructScene(
 			final Constructor<? extends NerdScene<SketchPGraphicsT>> p_sceneConstructor) {
 
 		if (p_sceneConstructor == null) // Shouldn't ever be!
@@ -690,7 +690,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 			final Class<? extends NerdScene<SketchPGraphicsT>> p_sceneClass,
 			final NerdSceneState p_state) {
 		this.setScene(
-				this.constructAndInitScene(
+				this.constructScene(
 						this.getSceneConstructor(p_sceneClass)),
 				p_state);
 	}
