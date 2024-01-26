@@ -10,8 +10,6 @@ import processing.opengl.PGraphics3D;
 
 public abstract class NerdP3dScene extends NerdScene<PGraphics3D> {
 
-    // TODO Get renderer-specific windows module instances!
-
     public final NerdP3dGraphics GRAPHICS;
     public final NerdGlWindowModule WINDOW;
 

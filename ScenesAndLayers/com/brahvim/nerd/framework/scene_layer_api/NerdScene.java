@@ -479,7 +479,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 			this.ASSETS.forEach(NerdAsset::startLoading);
 
 		this.donePreloading = true;
-
+		// System.gc(); // Do we need this?
 	}
 
 	/* `package` */ void runSceneChanged() {
@@ -526,7 +526,6 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 				this.GENERIC_GRAPHICS.pop();
 			}
 		}
-
 	}
 
 	/* `package` */ void runPost() {
@@ -554,7 +553,6 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 				this.post();
 			}
 		}
-
 	}
 
 	/* `package` */ void runExit() {
@@ -588,7 +586,6 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 				this.pre();
 			}
 		}
-
 	}
 
 	// region Scene workflow callbacks.

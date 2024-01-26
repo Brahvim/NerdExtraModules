@@ -726,13 +726,14 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 			// Exit the scene, and nullify the cache.
 			this.currentScene.runSceneChanged();
 
-			final NerdScenesModuleSceneCache<SketchPGraphicsT> sceneCache = this.SCENE_CLASS_TO_CACHE_MAP
-					.get(this.currentSceneClass);
+			final NerdScenesModuleSceneCache<SketchPGraphicsT>
+			/*   */ sceneCache = this.SCENE_CLASS_TO_CACHE_MAP.get(this.currentSceneClass);
 			if (sceneCache != null)
-				sceneCache.nullifyCache(); // Sets the `NerdScene<SketchPGraphicsT>` instance to
-											// `null` and calls
-											// `System.gc()`!
+				sceneCache.nullifyCache();// Sets the `NerdScene` instance to `null`, then calls `System.gc()`!
 		}
+
+		// ...And we'll call `System.gc()` again!
+		System.gc();
 
 		this.currentSceneClass = (Class<NerdScene<SketchPGraphicsT>>) p_currentScene.getClass();
 		this.currentScene = p_currentScene;
