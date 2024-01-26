@@ -94,11 +94,19 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	}
 
 	// region Time queries.
+	/**
+	 * @return The number of milliseconds that had passed when the
+	 *         {@link NerdScene} started. This data is cached in advance.
+	 */
 	public int getStartMillis() {
 		return this.startMillis;
 	}
 
-	public int findMillisSinceStart() {
+	/**
+	 * @return The number of milliseconds that have passed since the
+	 *         {@link NerdScene} started, as the result of an immediate calculation.
+	 */
+	public int getMillisSinceStart() {
 		return this.SKETCH.millis() - this.startMillis;
 	}
 	// endregion

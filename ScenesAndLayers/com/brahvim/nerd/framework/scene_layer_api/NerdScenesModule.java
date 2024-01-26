@@ -94,14 +94,14 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	 * does no optimization till the first scene switch. All scene switches after
 	 * that the initial should be fast enough!
 	 */
-	protected final Map<Class<? extends NerdScene<?>>, NerdScenesModuleSceneCache<SketchPGraphicsT>> //
-	SCENE_CLASS_TO_CACHE_MAP = new HashMap<>(2);
+	protected final Map<Class<? extends NerdScene<?>>, NerdScenesModuleSceneCache<SketchPGraphicsT>>
+	/*   */ SCENE_CLASS_TO_CACHE_MAP = new HashMap<>(2);
 
-	protected final Set<NerdScenesModule.NerdScenesModuleNewSceneStartedListener> //
-	SCENE_CHANGED_LISTENERS = new LinkedHashSet<>(0); // Not gunna have any, will we?
+	protected final Set<NerdScenesModule.NerdScenesModuleNewSceneStartedListener>
+	/*   */ SCENE_CHANGED_LISTENERS = new LinkedHashSet<>(0); // Not gunna have any, will we?
 
-	protected final Set<NerdScenesModule.NerdScenesModuleNewSceneStartedListener> //
-	SCENE_CHANGED_LISTENERS_TO_REMOVE = new LinkedHashSet<>(0); // Not gunna have any, will we?
+	protected final Set<NerdScenesModule.NerdScenesModuleNewSceneStartedListener>
+	/*   */ SCENE_CHANGED_LISTENERS_TO_REMOVE = new LinkedHashSet<>(0); // Not gunna have any, will we?
 
 	protected Class<? extends NerdScene<?>> currentSceneClass, previousSceneClass;
 	// endregion

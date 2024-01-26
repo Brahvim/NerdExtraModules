@@ -36,8 +36,9 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 
 	protected final Set<NerdEcsEntity> ENTITIES = new HashSet<>();
 	protected final Set<NerdEcsComponent> COMPONENTS = new HashSet<>();
-	protected final Map<String, NerdEcsEntity> NAME_TO_ENTITY_MAP = new HashMap<>();
-	protected final Map<Class<? extends NerdEcsComponent>, HashSet<NerdEcsComponent>> CLASSES_TO_COMPONENTS_MAP = new HashMap<>();
+	protected final Map<String, NerdEcsEntity> NAME_TO_ENTITY_MAP = new HashMap<>(0);
+	protected final Map<Class<? extends NerdEcsComponent>, HashSet<NerdEcsComponent>>
+	/*   */ CLASSES_TO_COMPONENTS_MAP = new HashMap<>(0);
 
 	protected long numUnnamedEntities = 1;
 	protected NerdEcsSystem<?>[] ecsSystems;
