@@ -36,6 +36,12 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 
 	public final NerdScene<SketchPGraphicsT> SCENE = this;
 
+	@SuppressWarnings("unchecked")
+	public final Class<NerdScene<SketchPGraphicsT>> SCENE_CLASS
+	/*   */ = (Class<NerdScene<SketchPGraphicsT>>) this.getClass();
+
+	public final String SCENE_NAME = this.SCENE_CLASS.getSimpleName();
+
 	// region `protected` fields.
 	protected final NerdSketch<SketchPGraphicsT> SKETCH;
 	protected final NerdScenesModule<SketchPGraphicsT> MANAGER;
