@@ -518,27 +518,28 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 				this.GENERIC_GRAPHICS.pop();
 
 				for (final NerdLayer<SketchPGraphicsT> l : this.LAYERS)
-					if (l != null)
-						if (l.isActive()) {
-							this.GENERIC_GRAPHICS.push();
-							l.draw();
-							this.GENERIC_GRAPHICS.pop();
-						}
+					this.runLayerDraw(l);
 			}
 
 			case LAYER -> {
 				for (final NerdLayer<SketchPGraphicsT> l : this.LAYERS)
-					if (l != null)
-						if (l.isActive()) {
-							this.GENERIC_GRAPHICS.push();
-							l.draw();
-							this.GENERIC_GRAPHICS.pop();
-						}
+					this.runLayerDraw(l);
 
 				this.GENERIC_GRAPHICS.push();
 				this.draw();
 				this.GENERIC_GRAPHICS.pop();
 			}
+		}
+	}
+
+	private void runLayerDraw(final NerdLayer<SketchPGraphicsT> p_layer) {
+		if (p_layer == null)
+			return;
+
+		if (p_layer.isActive()) {
+			this.GENERIC_GRAPHICS.push();
+			p_layer.draw();
+			this.GENERIC_GRAPHICS.pop();
 		}
 	}
 
@@ -552,21 +553,20 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 		switch (this.MANAGER.scenesModuleSettings.preFirstCaller) {
 			case SCENE -> {
 				this.post();
-
-				for (final NerdLayer<SketchPGraphicsT> l : this.LAYERS)
-					if (l != null)
-						if (l.isActive())
-							l.post();
+				this.runLayerPost();
 			}
 			case LAYER -> {
-				for (final NerdLayer<SketchPGraphicsT> l : this.LAYERS)
-					if (l != null)
-						if (l.isActive())
-							l.post();
-
+				this.runLayerPost();
 				this.post();
 			}
 		}
+	}
+
+	private void runLayerPost() {
+		for (final NerdLayer<SketchPGraphicsT> l : this.LAYERS)
+			if (l != null)
+				if (l.isActive())
+					l.post();
 	}
 
 	/* `package` */ void runExit() {
