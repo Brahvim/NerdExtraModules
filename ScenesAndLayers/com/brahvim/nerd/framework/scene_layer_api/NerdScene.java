@@ -50,9 +50,9 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 
 	// Non-generic:
 	protected final NerdSceneState STATE;
-	protected final NerdInputModule INPUT;
-	protected final NerdAssetsModule ASSETS;
-	protected final NerdDisplayModule DISPLAY;
+	protected final NerdInputModule<SketchPGraphicsT> INPUT;
+	protected final NerdAssetsModule<SketchPGraphicsT> ASSETS;
+	protected final NerdDisplayModule<SketchPGraphicsT> DISPLAY;
 	// endregion
 
 	// region `private` fields.
@@ -71,11 +71,11 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	@SuppressWarnings("unchecked")
 	protected NerdScene(final NerdScenesModule<SketchPGraphicsT> p_sceneMan) {
 		this.MANAGER = p_sceneMan;
-		this.SKETCH = (NerdSketch<SketchPGraphicsT>) this.MANAGER.getSketch();
+		this.SKETCH = this.MANAGER.getSketch();
 		this.GENERIC_GRAPHICS = this.SKETCH.getNerdGenericGraphics();
 
 		this.STATE = new NerdSceneState();
-		this.ASSETS = new NerdAssetsModule(this.SKETCH);
+		this.ASSETS = new NerdAssetsModule<>(this.SKETCH);
 		this.INPUT = this.SKETCH.getNerdModule(NerdInputModule.class);
 		this.DISPLAY = this.SKETCH.getNerdModule(NerdDisplayModule.class);
 		this.GENERIC_WINDOW = this.SKETCH.getNerdModule(NerdWindowModule.class);
@@ -490,7 +490,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 					Thread.currentThread().interrupt();
 				}
 		} else
-			this.ASSETS.forEach(NerdAsset::startLoading);
+			this.ASSETS.forEach((Consumer<NerdAsset<SketchPGraphicsT>>) NerdAsset::startLoading);
 
 		this.donePreloading = true;
 		// System.gc(); // Do we need this?

@@ -5,7 +5,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class NerdEcsModuleData implements Serializable {
+import processing.core.PGraphics;
+
+public class NerdEcsModuleData<SketchPGraphicsT extends PGraphics> implements Serializable {
 
 	public static final long serialVersionUID = -6488574946L;
 
@@ -16,16 +18,16 @@ public class NerdEcsModuleData implements Serializable {
 
 	protected long numUnnamedEntities = 1;
 	protected NerdEcsSystem<?>[] ecsSystems;
-	protected Set<NerdEcsEntity> entities; // NOSONAR
+	protected Set<NerdEcsEntity<SketchPGraphicsT>> entities; // NOSONAR
 	protected Set<NerdEcsComponent> components; // NOSONAR
-	protected Map<String, NerdEcsEntity> nameToEntityMap; // NOSONAR
+	protected Map<String, NerdEcsEntity<SketchPGraphicsT>> nameToEntityMap; // NOSONAR
 	protected Map<Class<? extends NerdEcsComponent>, HashSet<NerdEcsComponent>> classesToComponentsMap; // NOSONAR
 
 	@SuppressWarnings("unused")
 	private NerdEcsModuleData() {
 	}
 
-	protected NerdEcsModuleData(final NerdEcsModule p_ecs) {
+	protected NerdEcsModuleData(final NerdEcsModule<SketchPGraphicsT> p_ecs) {
 		this.entities = p_ecs.ENTITIES;
 		this.ecsSystems = p_ecs.ecsSystems;
 		this.components = p_ecs.COMPONENTS;

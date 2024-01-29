@@ -2,7 +2,10 @@ package com.brahvim.nerd.framework.ecs;
 
 import com.brahvim.nerd.processing_wrapper.NerdModuleSettings;
 
-public class NerdEcsModuleSettings extends NerdModuleSettings<NerdEcsModule> {
+import processing.core.PGraphics;
+
+public class NerdEcsModuleSettings<SketchPGraphicsT extends PGraphics>
+		extends NerdModuleSettings<SketchPGraphicsT, NerdEcsModule<SketchPGraphicsT>> {
 
 	public Class<? extends NerdEcsSystem<?>>[] ecsSystemsOrder;
 

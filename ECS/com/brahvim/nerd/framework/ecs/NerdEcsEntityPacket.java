@@ -2,15 +2,17 @@ package com.brahvim.nerd.framework.ecs;
 
 import java.io.Serializable;
 
-/* `package` */ class NerdEcsEntityPacket implements Serializable {
+import processing.core.PGraphics;
+
+/* `package` */ class NerdEcsEntityPacket<SketchPGraphicsT extends PGraphics> implements Serializable {
 
 	@SuppressWarnings("unused")
 	private final String NAME;
 
 	@SuppressWarnings("unused")
-	private final NerdEcsEntity ENTITY;
+	private final NerdEcsEntity<SketchPGraphicsT> ENTITY;
 
-	public NerdEcsEntityPacket(final String p_name, final NerdEcsEntity p_entity) {
+	public NerdEcsEntityPacket(final String p_name, final NerdEcsEntity<SketchPGraphicsT> p_entity) {
 		this.NAME = p_name;
 		this.ENTITY = p_entity;
 	}

@@ -18,7 +18,7 @@ import com.brahvim.nerd.window_management.NerdWindowModule;
 
 import processing.core.PGraphics;
 
-public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdModule {
+public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdModule<SketchPGraphicsT> {
 
 	// region Inner classes.
 	// My code style: If it is an inner class, also write the name of the outer
@@ -48,7 +48,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 
 		/* `package */ NerdScene<SketchPGraphicsForCacheT> cachedReference;
 		// `NerdSceneModule` deletes this when the scene exits.
-		/* `package */ NerdAssetsModule cachedAssets;
+		/* `package */ NerdAssetsModule<SketchPGraphicsForCacheT> cachedAssets;
 		// endregion
 
 		/* `package */ NerdScenesModuleSceneCache(
@@ -74,7 +74,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	}
 	// endregion
 
-	protected NerdScenesModuleSettings scenesModuleSettings;
+	protected NerdScenesModuleSettings<SketchPGraphicsT> scenesModuleSettings;
 
 	// region `protected` fields.
 
@@ -111,11 +111,13 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	}
 
 	@Override
-	protected void assignModuleSettings(final NerdModuleSettings<?> p_settings) {
+	@SuppressWarnings("unchecked")
+	protected void assignModuleSettings(
+			final NerdModuleSettings<SketchPGraphicsT, ? extends NerdModule<SketchPGraphicsT>> p_settings) {
 		if (p_settings instanceof final NerdScenesModuleSettings settings)
 			this.scenesModuleSettings = settings;
 		else
-			this.scenesModuleSettings = new NerdScenesModuleSettings(null);
+			this.scenesModuleSettings = new NerdScenesModuleSettings<>(null);
 	}
 
 	// region `NerdSketch` workflow callbacks.
@@ -134,7 +136,6 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public void draw() {
 		if (super.SKETCH.frameCount == 1 && this.currentScene == null) {
 			if (this.scenesModuleSettings.FIRST_SCENE_CLASS == null)
@@ -142,7 +143,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 						+ NerdScene.class.getSimpleName()
 						+ "` to show!");
 			else
-				this.startScene((Class<NerdScene<SketchPGraphicsT>>) this.scenesModuleSettings.FIRST_SCENE_CLASS);
+				this.startScene(this.scenesModuleSettings.FIRST_SCENE_CLASS);
 		}
 
 		if (this.currentScene != null)
@@ -376,7 +377,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 		return (Class<? extends NerdScene<SketchPGraphicsT>>) this.previousSceneClass;
 	}
 
-	public NerdScenesModuleSettings getScenesModuleSettings() {
+	public NerdScenesModuleSettings<SketchPGraphicsT> getScenesModuleSettings() {
 		return this.scenesModuleSettings;
 	}
 	// endregion
@@ -561,8 +562,10 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 		// We're allowed to preload only once?
 		// Don't re-load, just use the cache!:
 		if (this.scenesModuleSettings.ON_PRELOAD.preloadOnlyOnce) {
-			final NerdAssetsModule assets = this.SCENE_CLASS_TO_CACHE_MAP.get(sceneClass).cachedAssets;
-			super.getSketchModulesMap().put(NerdAssetsModule.class, assets);
+			final NerdAssetsModule<SketchPGraphicsT> assets = this.SCENE_CLASS_TO_CACHE_MAP
+					.get(sceneClass).cachedAssets;
+			super.getSketchModulesMap()
+					.put((Class<? extends NerdModule<SketchPGraphicsT>>) NerdAssetsModule.class, assets);
 			p_scene.ASSETS.clear(); // Since the next operation is an addition, clear; else it won't be 'copying'!
 			p_scene.ASSETS.addAllAssetsFrom(assets);
 		} else { // Else, since we're supposed to run

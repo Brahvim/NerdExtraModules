@@ -8,7 +8,9 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public final class NerdEcsEntity implements Serializable {
+import processing.core.PGraphics;
+
+public final class NerdEcsEntity<SketchPGraphicsT extends PGraphics> implements Serializable {
 
 	// region Fields.
 	public static final long serialVersionUID = -84636463676L;
@@ -16,13 +18,13 @@ public final class NerdEcsEntity implements Serializable {
 	// Nope, no use in keeping the name here!
 	// If you want speed, let there be a `HashMap` in `NerdEcsModule`!
 
-	protected final transient NerdEcsModule MANAGER;
-	protected final transient NerdEcsEntity ENTITY = this;
+	protected final transient NerdEcsModule<SketchPGraphicsT> MANAGER;
+	protected final transient NerdEcsEntity<SketchPGraphicsT> ENTITY = this;
 
 	private final Set<NerdEcsComponent> COMPONENTS = new LinkedHashSet<>();
 	// endregion
 
-	protected NerdEcsEntity(final NerdEcsModule p_module) {
+	protected NerdEcsEntity(final NerdEcsModule<SketchPGraphicsT> p_module) {
 		this.MANAGER = p_module;
 	}
 

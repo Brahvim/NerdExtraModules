@@ -23,7 +23,10 @@ import com.brahvim.nerd.processing_wrapper.NerdSketchSettings;
 import com.brahvim.nerd.utils.NerdByteSerialUtils;
 import com.brahvim.nerd.utils.java_function_extensions.NerdTriConsumer;
 
-public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewSceneStartedListener {
+import processing.core.PGraphics;
+
+public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModule<SketchPGraphicsT>
+		implements NerdScenesModuleNewSceneStartedListener {
 
 	// region Fields.
 	public static final long serialVersionUID = -6488574946L;
@@ -34,9 +37,9 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 	// .<Class<? extends NerdEcsSystem<? extends NerdEcsComponent>>>of(null, null,
 	// null).toArray();
 
-	protected final Set<NerdEcsEntity> ENTITIES = new HashSet<>();
+	protected final Set<NerdEcsEntity<SketchPGraphicsT>> ENTITIES = new HashSet<>();
 	protected final Set<NerdEcsComponent> COMPONENTS = new HashSet<>();
-	protected final Map<String, NerdEcsEntity> NAME_TO_ENTITY_MAP = new HashMap<>(0);
+	protected final Map<String, NerdEcsEntity<SketchPGraphicsT>> NAME_TO_ENTITY_MAP = new HashMap<>(0);
 	protected final Map<Class<? extends NerdEcsComponent>, HashSet<NerdEcsComponent>>
 	/*   */ CLASSES_TO_COMPONENTS_MAP = new HashMap<>(0);
 
@@ -45,13 +48,15 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 	// endregion
 
 	// region Construction.
-	public NerdEcsModule(final NerdSketch<?> p_sketch) {
+	public NerdEcsModule(final NerdSketch<SketchPGraphicsT> p_sketch) {
 		super(p_sketch);
 		this.setSystemsOrder(NerdEcsModule.DEFAULT_ECS_SYSTEMS_ORDER);
 	}
 
 	@Override
-	protected void assignModuleSettings(final NerdModuleSettings<?> p_settings) {
+	@SuppressWarnings("unchecked")
+	protected void assignModuleSettings(
+			final NerdModuleSettings<SketchPGraphicsT, ? extends NerdModule<SketchPGraphicsT>> p_settings) {
 		if (p_settings instanceof final NerdEcsModuleSettings settings)
 			this.setSystemsOrder(settings.ecsSystemsOrder);
 		else
@@ -194,7 +199,7 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 		return NerdEcsModule.DEFAULT_ECS_SYSTEMS_ORDER;
 	}
 
-	public NerdEcsEntity createEntity() {
+	public NerdEcsEntity<SketchPGraphicsT> createEntity() {
 		return this.createEntity(null);
 	}
 
@@ -202,20 +207,20 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 		return this.ecsSystems;
 	}
 
-	public NerdEcsEntity createEntity(final String p_name) {
-		final NerdEcsEntity toRet = new NerdEcsEntity(this);
+	public NerdEcsEntity<SketchPGraphicsT> createEntity(final String p_name) {
+		final NerdEcsEntity<SketchPGraphicsT> toRet = new NerdEcsEntity<>(this);
 		this.renameEntity(toRet, p_name);
 		// this.entitiesToAdd.add(toRet);
 		this.ENTITIES.add(toRet);
 		return toRet;
 	}
 
-	public void removeEntity(final NerdEcsEntity p_entity) {
+	public void removeEntity(final NerdEcsEntity<SketchPGraphicsT> p_entity) {
 		// this.entitiesToRemove.add(p_entity);
 		this.ENTITIES.add(p_entity);
 	}
 
-	public String getNameFromEntity(final NerdEcsEntity p_entity) {
+	public String getNameFromEntity(final NerdEcsEntity<SketchPGraphicsT> p_entity) {
 		for (final var e : this.NAME_TO_ENTITY_MAP.entrySet())
 			if (e.getValue() == p_entity)
 				return e.getKey();
@@ -223,7 +228,7 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 		return "";
 	}
 
-	public NerdEcsEntity getEntityFromName(final String p_name) {
+	public NerdEcsEntity<SketchPGraphicsT> getEntityFromName(final String p_name) {
 		return this.NAME_TO_ENTITY_MAP.get(p_name);
 	}
 
@@ -266,7 +271,7 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 	 * @param p_entity is the entity you wish to rename, and
 	 * @param p_name   is the new name you wish to assign to it!
 	 */
-	public void renameEntity(final NerdEcsEntity p_entity, final String p_name) {
+	public void renameEntity(final NerdEcsEntity<SketchPGraphicsT> p_entity, final String p_name) {
 		if (p_name == null || p_name.isBlank()) {
 			this.NAME_TO_ENTITY_MAP.put(Long.toString(this.numUnnamedEntities++), p_entity);
 			return;
@@ -314,7 +319,7 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 	// endregion
 
 	// region Iteration!
-	public void forEachEntity(final Consumer<? super NerdEcsEntity> p_action) {
+	public void forEachEntity(final Consumer<? super NerdEcsEntity<SketchPGraphicsT>> p_action) {
 		if (p_action != null)
 			this.ENTITIES.forEach(p_action);
 	}
@@ -324,7 +329,7 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 			this.COMPONENTS.forEach(p_action);
 	}
 
-	public void forEachEntityWithName(final BiConsumer<String, NerdEcsEntity> p_action) {
+	public void forEachEntityWithName(final BiConsumer<String, NerdEcsEntity<SketchPGraphicsT>> p_action) {
 		if (p_action != null)
 			this.NAME_TO_ENTITY_MAP.forEach(p_action);
 
@@ -333,7 +338,7 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 		// p_action.accept(e.getKey(), e.getValue());
 	}
 
-	public void forEachEntityUnnamed(final Consumer<NerdEcsEntity> p_action) {
+	public void forEachEntityUnnamed(final Consumer<NerdEcsEntity<SketchPGraphicsT>> p_action) {
 		if (p_action != null)
 			for (final var entry : this.NAME_TO_ENTITY_MAP.entrySet()) {
 				final String name = entry.getKey();
@@ -355,13 +360,13 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 
 	// region Serialization.
 	// region Saving.
-	public byte[] serializeEntity(final NerdEcsEntity p_entity) {
+	public byte[] serializeEntity(final NerdEcsEntity<SketchPGraphicsT> p_entity) {
 		final String name = this.getNameFromEntity(p_entity);
 
 		if ("".equals(name))
 			return new byte[0];
 
-		return NerdByteSerialUtils.toBytes(new NerdEcsEntityPacket(name, p_entity));
+		return NerdByteSerialUtils.toBytes(new NerdEcsEntityPacket<>(name, p_entity));
 	}
 
 	public byte[] serializeComponent(final NerdEcsComponent p_component) {
@@ -376,7 +381,7 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 	 *      NerdEcsModule::saveState(File)}.
 	 */
 	public byte[] saveState() {
-		return NerdByteSerialUtils.toBytes(new NerdEcsModuleData(this));
+		return NerdByteSerialUtils.toBytes(new NerdEcsModuleData<SketchPGraphicsT>(this));
 	}
 
 	/**
@@ -386,7 +391,7 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 	 * @see {@linkplain NerdEcsModule#saveState() NerdEcsModule::saveState()}
 	 */
 	public void saveState(final File p_file) {
-		NerdByteSerialUtils.toFile(new NerdEcsModuleData(this), p_file);
+		NerdByteSerialUtils.toFile(new NerdEcsModuleData<SketchPGraphicsT>(this), p_file);
 	}
 	// endregion
 
@@ -412,7 +417,7 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 		this.loadStateImpl(NerdByteSerialUtils.fromBytes(p_serializedData));
 	}
 
-	private void loadStateImpl(final NerdEcsModuleData p_deserialized) {
+	private void loadStateImpl(final NerdEcsModuleData<SketchPGraphicsT> p_deserialized) {
 		this.ecsSystems = p_deserialized.ecsSystems;
 		this.numUnnamedEntities = p_deserialized.numUnnamedEntities;
 
@@ -437,7 +442,7 @@ public class NerdEcsModule extends NerdModule implements NerdScenesModuleNewScen
 		// region Remove elements not available in the maps in the deserialized module.
 		// There's nothing like `Set::get()`! Storing stuff to remove then removing it!:
 		final Set<String> toRemove = new HashSet<>();
-		final Map<String, NerdEcsEntity> myMap = this.NAME_TO_ENTITY_MAP,
+		final Map<String, NerdEcsEntity<SketchPGraphicsT>> myMap = this.NAME_TO_ENTITY_MAP,
 				otherMap = p_deserialized.nameToEntityMap;
 
 		for (final var e : myMap.entrySet()) {

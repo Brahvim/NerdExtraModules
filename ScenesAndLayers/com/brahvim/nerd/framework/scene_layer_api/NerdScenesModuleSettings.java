@@ -4,13 +4,17 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
+import com.brahvim.nerd.processing_wrapper.NerdModule;
 import com.brahvim.nerd.processing_wrapper.NerdModuleSettings;
 import com.brahvim.nerd.processing_wrapper.NerdSketch;
 
-// @SuppressWarnings("rawtypes")
-public class NerdScenesModuleSettings extends NerdModuleSettings<NerdScenesModule<?>> {
+import processing.core.PGraphics;
 
-	public final Class<? extends NerdScene<?>> FIRST_SCENE_CLASS;
+// @SuppressWarnings("rawtypes")
+public class NerdScenesModuleSettings<SketchPGraphicsT extends PGraphics>
+		extends NerdModuleSettings<SketchPGraphicsT, NerdModule<SketchPGraphicsT>> {
+
+	public final Class<? extends NerdScene<SketchPGraphicsT>> FIRST_SCENE_CLASS;
 
 	/**
 	 * Dictates to every {@link NerdScenesModule} instance, the order in which a
@@ -39,7 +43,7 @@ public class NerdScenesModuleSettings extends NerdModuleSettings<NerdScenesModul
 		SCENE(), LAYER();
 	}
 
-	public class OnScenePreload {
+	public class OnScenePreload<InnerSketchPGraphicsT extends PGraphics> {
 
 		private OnScenePreload() {
 		}
@@ -93,7 +97,7 @@ public class NerdScenesModuleSettings extends NerdModuleSettings<NerdScenesModul
 
 	}
 
-	public class OnSceneSwitch {
+	public class OnSceneSwitch<InnerSketchPGraphicsT extends PGraphics> {
 
 		private OnSceneSwitch() {
 		}
@@ -129,9 +133,9 @@ public class NerdScenesModuleSettings extends NerdModuleSettings<NerdScenesModul
 
 	}
 
-	public final NerdScenesModuleSettings.OnSceneSwitch ON_SWITCH = new OnSceneSwitch();
+	public final OnSceneSwitch<SketchPGraphicsT> ON_SWITCH = new OnSceneSwitch<>();
 
-	public final NerdScenesModuleSettings.OnScenePreload ON_PRELOAD = new OnScenePreload();
+	public final OnScenePreload<SketchPGraphicsT> ON_PRELOAD = new OnScenePreload<>();
 
 	// region Callback order specifiers.
 	/**
@@ -164,13 +168,13 @@ public class NerdScenesModuleSettings extends NerdModuleSettings<NerdScenesModul
 
 	public Set<Class<? extends NerdScene<?>>> classesOfScenesToPreload = new HashSet<>(0);
 
-	public NerdScenesModuleSettings(final Class<? extends NerdScene<?>> p_firstSceneClass) {
+	public NerdScenesModuleSettings(final Class<? extends NerdScene<SketchPGraphicsT>> p_firstSceneClass) {
 		this.FIRST_SCENE_CLASS = p_firstSceneClass;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <RetModuleClassT extends NerdScenesModule<?>> Class<RetModuleClassT> getModuleClass() {
+	public <RetModuleClassT extends NerdModule<SketchPGraphicsT>> Class<RetModuleClassT> getModuleClass() {
 		return (Class<RetModuleClassT>) NerdScenesModule.class;
 	}
 
