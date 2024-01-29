@@ -43,7 +43,7 @@ public class NerdScenesModuleSettings<SketchPGraphicsT extends PGraphics>
 		SCENE(), LAYER();
 	}
 
-	public class OnScenePreload<InnerSketchPGraphicsT extends PGraphics> {
+	public class OnScenePreload {
 
 		private OnScenePreload() {
 		}
@@ -97,7 +97,7 @@ public class NerdScenesModuleSettings<SketchPGraphicsT extends PGraphics>
 
 	}
 
-	public class OnSceneSwitch<InnerSketchPGraphicsT extends PGraphics> {
+	public class OnSceneSwitch {
 
 		private OnSceneSwitch() {
 		}
@@ -133,9 +133,8 @@ public class NerdScenesModuleSettings<SketchPGraphicsT extends PGraphics>
 
 	}
 
-	public final OnSceneSwitch<SketchPGraphicsT> ON_SWITCH = new OnSceneSwitch<>();
-
-	public final OnScenePreload<SketchPGraphicsT> ON_PRELOAD = new OnScenePreload<>();
+	public final NerdScenesModuleSettings<SketchPGraphicsT>.OnSceneSwitch ON_SWITCH = new OnSceneSwitch();
+	public final NerdScenesModuleSettings<SketchPGraphicsT>.OnScenePreload ON_PRELOAD = new OnScenePreload();
 
 	// region Callback order specifiers.
 	/**
