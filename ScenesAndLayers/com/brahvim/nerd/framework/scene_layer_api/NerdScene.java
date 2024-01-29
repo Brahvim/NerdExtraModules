@@ -17,8 +17,8 @@ import java.util.function.Consumer;
 
 import com.brahvim.nerd.io.asset_loader.NerdAsset;
 import com.brahvim.nerd.io.asset_loader.NerdAssetsModule;
+import com.brahvim.nerd.processing_wrapper.NerdAbstractGraphics;
 import com.brahvim.nerd.processing_wrapper.NerdSketch;
-import com.brahvim.nerd.processing_wrapper.graphics_backends.NerdGenericGraphics;
 import com.brahvim.nerd.window_management.NerdDisplayModule;
 import com.brahvim.nerd.window_management.NerdInputModule;
 import com.brahvim.nerd.window_management.NerdWindowModule;
@@ -46,7 +46,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	protected final NerdSketch<SketchPGraphicsT> SKETCH;
 	protected final NerdScenesModule<SketchPGraphicsT> MANAGER;
 	protected final NerdWindowModule<SketchPGraphicsT> GENERIC_WINDOW;
-	protected final NerdGenericGraphics<SketchPGraphicsT> GENERIC_GRAPHICS;
+	protected final NerdAbstractGraphics<SketchPGraphicsT> GENERIC_GRAPHICS;
 
 	// Non-generic:
 	protected final NerdSceneState STATE;
@@ -95,7 +95,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 		return this.SKETCH;
 	}
 
-	public NerdGenericGraphics<SketchPGraphicsT> getGenericGraphics() {
+	public NerdAbstractGraphics<SketchPGraphicsT> getGenericGraphics() {
 		return this.GENERIC_GRAPHICS;
 	}
 

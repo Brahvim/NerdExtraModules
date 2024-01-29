@@ -1,8 +1,8 @@
 package com.brahvim.nerd.framework.scene_layer_api;
 
 import com.brahvim.nerd.io.asset_loader.NerdAssetsModule;
+import com.brahvim.nerd.processing_wrapper.NerdAbstractGraphics;
 import com.brahvim.nerd.processing_wrapper.NerdSketch;
-import com.brahvim.nerd.processing_wrapper.graphics_backends.NerdGenericGraphics;
 import com.brahvim.nerd.window_management.NerdDisplayModule;
 import com.brahvim.nerd.window_management.NerdInputModule;
 import com.brahvim.nerd.window_management.NerdWindowModule;
@@ -37,7 +37,7 @@ public abstract class NerdLayer<SketchPGraphicsT extends PGraphics> {
 	protected final NerdScene<SketchPGraphicsT> SCENE;
 	// endregion
 
-	protected final NerdGenericGraphics<SketchPGraphicsT> GENERIC_GRAPHICS;
+	protected final NerdAbstractGraphics<SketchPGraphicsT> GENERIC_GRAPHICS;
 
 	// region `private` fields.
 	private int timesActivated;
