@@ -405,8 +405,8 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	// region `NerdLayer` construction.
 	private Constructor<? extends NerdLayer<SketchPGraphicsT>> getLayerConstructor(
 			final Class<? extends NerdLayer<SketchPGraphicsT>> p_layerClass) {
-		Constructor<? extends NerdLayer<SketchPGraphicsT>> toRet
-		/*   */ = this.LAYER_CONSTRUCTORS.get(p_layerClass);
+		Constructor<? extends NerdLayer<SketchPGraphicsT>>
+		/*   */ toRet = this.LAYER_CONSTRUCTORS.get(p_layerClass);
 		if (toRet != null)
 			return toRet;
 

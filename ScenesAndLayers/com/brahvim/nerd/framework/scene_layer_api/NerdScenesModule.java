@@ -547,8 +547,8 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 			return;
 		}
 
-		final Class<? extends NerdScene<SketchPGraphicsT>> sceneClass
-		/*   */ = (Class<NerdScene<SketchPGraphicsT>>) p_scene.getClass();
+		final Class<? extends NerdScene<SketchPGraphicsT>>
+		/*   */ sceneClass = (Class<NerdScene<SketchPGraphicsT>>) p_scene.getClass();
 
 		// If this scene has never been loaded up before, preload the data!
 		if (this.getTimesSceneLoaded(sceneClass) == 0) {
