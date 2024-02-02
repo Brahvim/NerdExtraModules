@@ -173,7 +173,7 @@ public class NerdScenesModuleSettings<SketchPGraphicsT extends PGraphics>
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <RetModuleClassT extends NerdModule<SketchPGraphicsT>> Class<RetModuleClassT> getModuleClass() {
+	public <RetModuleClassT extends NerdModule<SketchPGraphicsT>> Class<RetModuleClassT> getNerdModuleClass() {
 		return (Class<RetModuleClassT>) NerdScenesModule.class;
 	}
 

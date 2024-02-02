@@ -9,4 +9,10 @@ public class NerdEcsModuleSettings<SketchPGraphicsT extends PGraphics>
 
 	public Class<? extends NerdEcsSystem<?>>[] ecsSystemsOrder;
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public <RetModuleClassT extends NerdEcsModule<SketchPGraphicsT>> Class<RetModuleClassT> getNerdModuleClass() {
+		return (Class<RetModuleClassT>) NerdEcsModule.class;
+	}
+
 }
