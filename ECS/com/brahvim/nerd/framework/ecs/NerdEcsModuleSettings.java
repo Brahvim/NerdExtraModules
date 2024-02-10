@@ -9,6 +9,13 @@ public class NerdEcsModuleSettings<SketchPGraphicsT extends PGraphics>
 
 	public Class<? extends NerdEcsSystem<?>>[] ecsSystemsOrder;
 
+	public NerdEcsModuleSettings() {
+	}
+
+	public NerdEcsModuleSettings(final Class<? extends NerdEcsSystem<?>>[] ecsSystemsOrder) {
+		this.ecsSystemsOrder = ecsSystemsOrder;
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public <RetModuleClassT extends NerdEcsModule<SketchPGraphicsT>> Class<RetModuleClassT> getNerdModuleClass() {
