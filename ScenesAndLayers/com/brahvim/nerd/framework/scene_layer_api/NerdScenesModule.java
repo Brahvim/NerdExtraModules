@@ -12,7 +12,6 @@ import java.util.function.Consumer;
 
 import com.brahvim.nerd.io.asset_loader.NerdAssetsModule;
 import com.brahvim.nerd.processing_wrapper.NerdModule;
-import com.brahvim.nerd.processing_wrapper.NerdModuleSettings;
 import com.brahvim.nerd.processing_wrapper.NerdSketch;
 import com.brahvim.nerd.window_management.NerdWindowModule;
 
@@ -74,7 +73,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	}
 	// endregion
 
-	protected NerdScenesModuleSettings<SketchPGraphicsT> scenesModuleSettings;
+	protected final NerdScenesModuleSettings<SketchPGraphicsT> scenesModuleSettings;
 
 	// region `protected` fields.
 
@@ -106,18 +105,11 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	protected Class<? extends NerdScene<?>> currentSceneClass, previousSceneClass;
 	// endregion
 
-	public NerdScenesModule(final NerdSketch<SketchPGraphicsT> p_sketch) {
+	public NerdScenesModule(
+			final NerdSketch<SketchPGraphicsT> p_sketch,
+			final NerdScenesModuleSettings<SketchPGraphicsT> p_settings) {
 		super(p_sketch);
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	protected void assignModuleSettings(
-			final NerdModuleSettings<SketchPGraphicsT, ? extends NerdModule<SketchPGraphicsT>> p_settings) {
-		if (p_settings instanceof final NerdScenesModuleSettings settings)
-			this.scenesModuleSettings = settings;
-		else
-			this.scenesModuleSettings = new NerdScenesModuleSettings<>(null);
+		this.scenesModuleSettings = p_settings;
 	}
 
 	// region `NerdSketch` workflow callbacks.

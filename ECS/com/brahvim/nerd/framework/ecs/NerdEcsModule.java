@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -17,14 +18,13 @@ import com.brahvim.nerd.framework.scene_layer_api.NerdScenesModule.NerdScenesMod
 import com.brahvim.nerd.io.net.NerdUdpSocket;
 import com.brahvim.nerd.io.net.tcp.implementations.no_ssl.NerdTcpNoSslServer;
 import com.brahvim.nerd.processing_wrapper.NerdModule;
-import com.brahvim.nerd.processing_wrapper.NerdModuleSettings;
 import com.brahvim.nerd.processing_wrapper.NerdSketch;
-import com.brahvim.nerd.processing_wrapper.NerdSketchSettings;
 import com.brahvim.nerd.utils.NerdByteSerialUtils;
 import com.brahvim.nerd.utils.java_function_extensions.NerdTriConsumer;
 
 import processing.core.PGraphics;
 
+// TODO: This entire thing needs a rewrite to be actually data-oriented.
 public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModule<SketchPGraphicsT>
 		implements NerdScenesModuleNewSceneStartedListener {
 
@@ -37,8 +37,11 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 	// .<Class<? extends NerdEcsSystem<? extends NerdEcsComponent>>>of(null, null,
 	// null).toArray();
 
-	protected final Set<NerdEcsEntity<SketchPGraphicsT>> ENTITIES = new HashSet<>();
+	// `Set`s:
 	protected final Set<NerdEcsComponent> COMPONENTS = new HashSet<>();
+	protected final Set<NerdEcsEntity<SketchPGraphicsT>> ENTITIES = new HashSet<>();
+
+	// `Map`s:
 	protected final Map<String, NerdEcsEntity<SketchPGraphicsT>> NAME_TO_ENTITY_MAP = new HashMap<>(0);
 	protected final Map<Class<? extends NerdEcsComponent>, HashSet<NerdEcsComponent>>
 	/*   */ CLASSES_TO_COMPONENTS_MAP = new HashMap<>(0);
@@ -47,22 +50,17 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 	protected NerdEcsSystem<?>[] ecsSystems;
 	// endregion
 
-	// region Construction.
-	public NerdEcsModule(final NerdSketch<SketchPGraphicsT> p_sketch) {
+	public NerdEcsModule(
+			final NerdSketch<SketchPGraphicsT> p_sketch,
+			final NerdEcsModuleSettings<SketchPGraphicsT> p_settings) {
 		super(p_sketch);
-		this.setSystemsOrder(NerdEcsModule.DEFAULT_ECS_SYSTEMS_ORDER);
-	}
 
-	@Override
-	@SuppressWarnings("unchecked")
-	protected void assignModuleSettings(
-			final NerdModuleSettings<SketchPGraphicsT, ? extends NerdModule<SketchPGraphicsT>> p_settings) {
-		if (p_settings instanceof final NerdEcsModuleSettings settings)
-			this.setSystemsOrder(settings.ecsSystemsOrder);
-		else
-			this.setSystemsOrder(NerdEcsModule.DEFAULT_ECS_SYSTEMS_ORDER);
+		if (p_settings == null)
+			return;
+
+		this.setSystemsOrder(Objects.requireNonNullElse(
+				p_settings.ecsSystemsOrder, NerdEcsModule.DEFAULT_ECS_SYSTEMS_ORDER));
 	}
-	// endregion
 
 	// region `callOnAllSystems()` overloads.
 	@SuppressWarnings("all")
@@ -131,13 +129,6 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 			final NerdScenesModule<?> p_scenesModule,
 			final Class<? extends NerdScene<?>> p_previousClass,
 			final Class<? extends NerdScene<?>> p_currentClass) {
-	}
-
-	@Override
-	protected void sketchConstructed(final NerdSketchSettings<?> p_settings) {
-		// super.SKETCH.getNerdModule(NerdScenesModule.class).addNewSceneStartedListener(()
-		// this.callOnAllSystems(NerdEcsSystem::sceneChanged);
-		// );
 	}
 
 	@Override
