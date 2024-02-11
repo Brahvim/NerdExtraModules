@@ -490,7 +490,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 					Thread.currentThread().interrupt();
 				}
 		} else
-			this.ASSETS.forEach((Consumer<NerdAsset<SketchPGraphicsT>>) NerdAsset::startLoading);
+			this.ASSETS.forEach(NerdAsset::startLoading);
 
 		this.donePreloading = true;
 		// System.gc(); // Do we need this?

@@ -14,7 +14,6 @@ import java.util.function.Consumer;
 
 import com.brahvim.nerd.framework.scene_layer_api.NerdScene;
 import com.brahvim.nerd.framework.scene_layer_api.NerdScenesModule;
-import com.brahvim.nerd.framework.scene_layer_api.NerdScenesModule.NerdScenesModuleNewSceneStartedListener;
 import com.brahvim.nerd.io.net.NerdUdpSocket;
 import com.brahvim.nerd.io.net.tcp.implementations.no_ssl.NerdTcpNoSslServer;
 import com.brahvim.nerd.processing_wrapper.NerdModule;
@@ -26,7 +25,7 @@ import processing.core.PGraphics;
 
 // TODO: This entire thing needs a rewrite to be actually data-oriented.
 public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModule<SketchPGraphicsT>
-		implements NerdScenesModuleNewSceneStartedListener {
+		implements NerdScenesModule.NerdScenesModuleNewSceneStartedListener {
 
 	// region Fields.
 	public static final long serialVersionUID = -6488574946L;
@@ -123,7 +122,7 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 
 	// region Workflow callbacks (*mostly* declared as `protected`).
 	// From `NerdScenesModule`:
-	// TODO: Impl?!?!?!
+	// TODO: Figure out a way for `NerdModule`s to use callbacks.
 	@Override
 	public void sceneChanged(
 			final NerdScenesModule<?> p_scenesModule,
