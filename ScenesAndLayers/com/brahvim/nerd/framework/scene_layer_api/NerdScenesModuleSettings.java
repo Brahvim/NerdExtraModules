@@ -150,19 +150,19 @@ public class NerdScenesModuleSettings<SketchPGraphicsT extends PGraphics>
 	 * Controls whether {@linkplain NerdScene#draw() NerdScene::draw()} or
 	 * {@linkplain NerdLayer#draw() NerdLayer::draw()} is called first by the
 	 * {@link NerdScenesModule}. If the value of this field is ever{@code null}, it
-	 * is set to its default, {@linkplain NerdSceneLayerCallbackOrder#LAYER
-	 * NerdSceneLayerCallbackOrder::LAYER}.
+	 * is set to its default, {@linkplain NerdSceneLayerCallbackOrder#SCENE
+	 * NerdSceneLayerCallbackOrder::SCENE}.
 	 */
-	public NerdScenesModuleSettings.NerdSceneLayerCallbackOrder drawFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
+	public NerdScenesModuleSettings.NerdSceneLayerCallbackOrder drawFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.SCENE;
 
 	/**
 	 * Controls whether {@linkplain NerdScene#post() NerdScene::post()} or
 	 * {@linkplain NerdLayer#post() NerdLayer::post()} is called first by the
 	 * {@link NerdScenesModule}. If the value of this field is ever {@code null}, it
-	 * is set to its default, {@linkplain NerdSceneLayerCallbackOrder#LAYER
-	 * NerdSceneLayerCallbackOrder::LAYER}.
+	 * is set to its default, {@linkplain NerdSceneLayerCallbackOrder#SCENE
+	 * NerdSceneLayerCallbackOrder::SCENE}.
 	 */
-	public NerdScenesModuleSettings.NerdSceneLayerCallbackOrder postFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
+	public NerdScenesModuleSettings.NerdSceneLayerCallbackOrder postFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.SCENE;
 	// endregion
 
 	public Set<Class<? extends NerdScene<?>>> classesOfScenesToPreload = new HashSet<>(0);

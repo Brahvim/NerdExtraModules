@@ -34,8 +34,6 @@ import processing.core.PGraphics;
  */
 public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 
-	public final NerdScene<SketchPGraphicsT> SCENE = this;
-
 	@SuppressWarnings("unchecked")
 	public final Class<NerdScene<SketchPGraphicsT>> SCENE_CLASS
 	/*   */ = (Class<NerdScene<SketchPGraphicsT>>) this.getClass();
@@ -459,9 +457,9 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 		this.preload();
 		this.ASSETS.forceLoading();
 
-		if (this.MANAGER.scenesModuleSettings.ON_PRELOAD.useExecutors) {
+		if (this.MANAGER.SETTINGS.ON_PRELOAD.useExecutors) {
 			final ThreadPoolExecutor executor = new ThreadPoolExecutor(
-					0, this.MANAGER.scenesModuleSettings.ON_PRELOAD.maxExecutorThreads,
+					0, this.MANAGER.SETTINGS.ON_PRELOAD.maxExecutorThreads,
 					10L, TimeUnit.SECONDS, new SynchronousQueue<>(),
 					new ThreadFactory() {
 						private static int threadCount = 1;
@@ -481,7 +479,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 			executor.shutdown(); // This tells the executor to stop accepting new tasks.
 
 			// If you must complete within this function, do that:
-			if (this.MANAGER.scenesModuleSettings.ON_PRELOAD.completeAssetLoadingWithinPreload)
+			if (this.MANAGER.SETTINGS.ON_PRELOAD.completeAssetLoadingWithinPreload)
 				try {
 					executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS); // Keep going, keep going...
 					// Can't simply cheat the implementation to make it wait forever!
@@ -505,13 +503,13 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	}
 
 	/* `package` */ void runDraw() {
-		if (this.MANAGER.scenesModuleSettings.drawFirstCaller == null)
-			this.MANAGER.scenesModuleSettings.drawFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
+		if (this.MANAGER.SETTINGS.drawFirstCaller == null)
+			this.MANAGER.SETTINGS.drawFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
 
 		// To avoid asynchronous changes from causing repetition, we put both parts in
 		// `if` and `else` block.
 
-		switch (this.MANAGER.scenesModuleSettings.drawFirstCaller) {
+		switch (this.MANAGER.SETTINGS.drawFirstCaller) {
 			case SCENE -> {
 				this.GENERIC_GRAPHICS.push();
 				this.draw();
@@ -544,13 +542,13 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	}
 
 	/* `package` */ void runPost() {
-		if (this.MANAGER.scenesModuleSettings.postFirstCaller == null)
-			this.MANAGER.scenesModuleSettings.postFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
+		if (this.MANAGER.SETTINGS.postFirstCaller == null)
+			this.MANAGER.SETTINGS.postFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
 
 		// To avoid asynchronous changes from causing repetition, we put both parts in
 		// `if` and `else` block.
 
-		switch (this.MANAGER.scenesModuleSettings.preFirstCaller) {
+		switch (this.MANAGER.SETTINGS.preFirstCaller) {
 			case SCENE -> {
 				this.post();
 				this.runLayerPost();
@@ -579,10 +577,10 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	}
 
 	/* `package` */ void runPre() {
-		if (this.MANAGER.scenesModuleSettings.preFirstCaller == null)
-			this.MANAGER.scenesModuleSettings.preFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.SCENE;
+		if (this.MANAGER.SETTINGS.preFirstCaller == null)
+			this.MANAGER.SETTINGS.preFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.SCENE;
 
-		switch (this.MANAGER.scenesModuleSettings.preFirstCaller) {
+		switch (this.MANAGER.SETTINGS.preFirstCaller) {
 			case SCENE -> {
 				this.pre();
 

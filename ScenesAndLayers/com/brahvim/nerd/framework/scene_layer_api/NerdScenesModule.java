@@ -73,12 +73,11 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	}
 	// endregion
 
-	protected final NerdScenesModuleSettings<SketchPGraphicsT> scenesModuleSettings;
+	public final NerdScenesModuleSettings<SketchPGraphicsT> SETTINGS;
 
 	// region `protected` fields.
-
-	protected NerdScene<?> currentScene;
 	protected boolean sceneSwitchOccurred;
+	protected NerdScene<SketchPGraphicsT> currentScene;
 
 	/**
 	 * This {@link Map} contains cached data about each {@link NerdScene} class any
@@ -93,7 +92,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	 * does no optimization till the first scene switch. All scene switches after
 	 * that the initial should be fast enough!
 	 */
-	protected final Map<Class<? extends NerdScene<?>>, NerdScenesModuleSceneCache<SketchPGraphicsT>>
+	protected final Map<Class<? extends NerdScene<SketchPGraphicsT>>, NerdScenesModuleSceneCache<SketchPGraphicsT>>
 	/*   */ SCENE_CLASS_TO_CACHE_MAP = new HashMap<>(2);
 
 	protected final Set<NerdScenesModule.NerdScenesModuleNewSceneStartedListener>
@@ -102,14 +101,14 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	protected final Set<NerdScenesModule.NerdScenesModuleNewSceneStartedListener>
 	/*   */ SCENE_CHANGED_LISTENERS_TO_REMOVE = new LinkedHashSet<>(0); // Not gunna have any, will we?
 
-	protected Class<? extends NerdScene<?>> currentSceneClass, previousSceneClass;
+	protected Class<? extends NerdScene<SketchPGraphicsT>> currentSceneClass, previousSceneClass;
 	// endregion
 
 	public NerdScenesModule(
 			final NerdSketch<SketchPGraphicsT> p_sketch,
 			final NerdScenesModuleSettings<SketchPGraphicsT> p_settings) {
 		super(p_sketch);
-		this.scenesModuleSettings = p_settings;
+		this.SETTINGS = p_settings;
 	}
 
 	// region `NerdSketch` workflow callbacks.
@@ -130,12 +129,12 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	@Override
 	public void draw() {
 		if (super.SKETCH.frameCount == 1 && this.currentScene == null) {
-			if (this.scenesModuleSettings.FIRST_SCENE_CLASS == null)
+			if (this.SETTINGS.FIRST_SCENE_CLASS == null)
 				System.err.println("There is no initial `"
 						+ NerdScene.class.getSimpleName()
 						+ "` to show!");
 			else
-				this.startScene(this.scenesModuleSettings.FIRST_SCENE_CLASS);
+				this.startScene(this.SETTINGS.FIRST_SCENE_CLASS);
 		}
 
 		if (this.currentScene != null)
@@ -350,27 +349,20 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	// endregion
 
 	// region [`public`] Getters.
-	@SuppressWarnings("unchecked")
 	public NerdScene<SketchPGraphicsT> getCurrentScene() {
-		return (NerdScene<SketchPGraphicsT>) this.currentScene;
+		return this.currentScene;
 	}
 
 	public boolean didSceneSwitchOccur() {
 		return this.sceneSwitchOccurred;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Class<? extends NerdScene<SketchPGraphicsT>> getCurrentSceneClass() {
-		return (Class<? extends NerdScene<SketchPGraphicsT>>) this.currentSceneClass;
+		return this.currentSceneClass;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Class<? extends NerdScene<SketchPGraphicsT>> getPreviousSceneClass() {
-		return (Class<? extends NerdScene<SketchPGraphicsT>>) this.previousSceneClass;
-	}
-
-	public NerdScenesModuleSettings<SketchPGraphicsT> getScenesModuleSettings() {
-		return this.scenesModuleSettings;
+		return this.previousSceneClass;
 	}
 	// endregion
 
@@ -402,7 +394,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	 * Returns a {@link HashSet} of {@link NerdScene} classes including only classes
 	 * instances of which this {@link NerdScenesModule} has ran.
 	 */
-	public final Set<Class<? extends NerdScene<?>>> getKnownScenesSet() {
+	public final Set<Class<? extends NerdScene<SketchPGraphicsT>>> getKnownSceneClassesSet() {
 		return new HashSet<>(this.SCENE_CLASS_TO_CACHE_MAP.keySet());
 	}
 	// endregion
@@ -467,12 +459,11 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 		this.restartScene(null);
 	}
 
-	@SuppressWarnings("unchecked")
 	public void restartScene(final NerdSceneState p_setupState) {
 		if (this.currentSceneClass == null)
 			return;
 
-		this.startSceneImpl((Class<? extends NerdScene<SketchPGraphicsT>>) this.currentSceneClass, p_setupState);
+		this.startSceneImpl(this.currentSceneClass, p_setupState);
 	}
 
 	public void startPreviousScene() {
@@ -553,17 +544,14 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 		// region Preloads other than the first one.
 		// We're allowed to preload only once?
 		// Don't re-load, just use the cache!:
-		if (this.scenesModuleSettings.ON_PRELOAD.preloadOnlyOnce) {
+		if (this.SETTINGS.ON_PRELOAD.preloadOnlyOnce) {
 			final NerdAssetsModule<SketchPGraphicsT> assets = this.SCENE_CLASS_TO_CACHE_MAP
 					.get(sceneClass).cachedAssets;
 			super.getSketchModulesMap()
 					.put((Class<? extends NerdModule<SketchPGraphicsT>>) NerdAssetsModule.class, assets);
 			p_scene.ASSETS.clear(); // Since the next operation is an addition, clear; else it won't be 'copying'!
 			p_scene.ASSETS.addAllAssetsFrom(assets);
-		} else { // Else, since we're supposed to run
-					// `NerdScene::preload()` each
-					// time, do
-					// that!:
+		} else { // Else, since we're supposed to run `NerdScene::preload()` each time, do that!:
 			p_scene.ASSETS.clear();
 			p_scene.runPreload();
 			this.SCENE_CLASS_TO_CACHE_MAP.get(sceneClass).cachedAssets = p_scene.ASSETS;
@@ -698,17 +686,17 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 		window.cursorConfined = false;
 
 		// region `this.SETTINGS.ON_SWITCH` tasks.
-		if (this.scenesModuleSettings.ON_SWITCH.doClear) {
-			if (this.scenesModuleSettings.ON_SWITCH.clearColor == -1)
+		if (this.SETTINGS.ON_SWITCH.doClear) {
+			if (this.SETTINGS.ON_SWITCH.clearColor == -1)
 				super.SKETCH.clear();
 			else
-				super.SKETCH.background(this.scenesModuleSettings.ON_SWITCH.clearColor);
+				super.SKETCH.background(this.SETTINGS.ON_SWITCH.clearColor);
 		}
 
-		if (this.scenesModuleSettings.ON_SWITCH.resetSceneLayerCallbackOrder) {
-			this.scenesModuleSettings.preFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.SCENE;
-			this.scenesModuleSettings.drawFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
-			this.scenesModuleSettings.postFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
+		if (this.SETTINGS.ON_SWITCH.resetSceneLayerCallbackOrder) {
+			this.SETTINGS.preFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.SCENE;
+			this.SETTINGS.drawFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
+			this.SETTINGS.postFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
 		}
 		// endregion
 
@@ -737,10 +725,9 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 
 	// Set the time, *then* call `NerdScenesModule::runSetup()`.
 	// Called only by `NerdScenesModule::setScene()`:
-	@SuppressWarnings("unchecked")
 	protected void setupCurrentScene(final NerdSceneState p_state) {
 		this.sceneSwitchOccurred = true;
-		this.loadSceneAssets((NerdScene<SketchPGraphicsT>) this.currentScene, false);
+		this.loadSceneAssets(this.currentScene, false);
 		this.SCENE_CLASS_TO_CACHE_MAP.get(this.currentSceneClass).timesLoaded++;
 
 		// Helps in resetting style and transformation info across scenes! YAY!:
