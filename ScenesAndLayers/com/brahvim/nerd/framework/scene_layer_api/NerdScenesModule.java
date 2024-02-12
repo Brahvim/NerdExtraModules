@@ -25,7 +25,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 
 	@FunctionalInterface
 	public interface NerdScenesModuleNewSceneStartedListener {
-		void sceneChanged(
+		public void sceneChanged(
 				NerdScenesModule<?> p_scenesModule,
 				Class<? extends NerdScene<?>> p_previousSceneClass,
 				Class<? extends NerdScene<?>> p_currentSceneClass);
