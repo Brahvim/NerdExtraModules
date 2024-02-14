@@ -11,6 +11,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import com.brahvim.nerd.io.asset_loader.NerdAssetsModule;
+import com.brahvim.nerd.processing_wrapper.NerdAbstractGraphics;
 import com.brahvim.nerd.processing_wrapper.NerdModule;
 import com.brahvim.nerd.processing_wrapper.NerdSketch;
 import com.brahvim.nerd.window_management.NerdWindowModule;
@@ -704,6 +705,11 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 		this.SCENE_CHANGED_LISTENERS.removeAll(this.SCENE_CHANGED_LISTENERS_TO_REMOVE);
 		this.SCENE_CHANGED_LISTENERS.forEach(l -> l
 				.sceneChanged(this, this.previousSceneClass, this.currentSceneClass));
+
+		final NerdAbstractGraphics<SketchPGraphicsT> nerdGraphics = super.SKETCH.getNerdGenericGraphics();
+		nerdGraphics.setClearImage(null);
+		nerdGraphics.setAutoClearFlag(false);
+		nerdGraphics.setClearImageFlag(false);
 
 		if (this.previousSceneClass != null) {
 			// Exit the scene, and nullify the cache.
