@@ -10,7 +10,6 @@ import com.brahvim.nerd.processing_wrapper.NerdSketch;
 
 import processing.core.PGraphics;
 
-// @SuppressWarnings("rawtypes")
 public class NerdScenesModuleSettings<SketchPGraphicsT extends PGraphics>
 		extends NerdModuleSettings<SketchPGraphicsT, NerdModule<SketchPGraphicsT>> {
 
