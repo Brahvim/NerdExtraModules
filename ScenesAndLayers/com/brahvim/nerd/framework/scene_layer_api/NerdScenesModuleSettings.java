@@ -137,6 +137,10 @@ public class NerdScenesModuleSettings<SketchPGraphicsT extends PGraphics>
 	public final NerdScenesModuleSettings<SketchPGraphicsT>.OnScenePreload ON_PRELOAD = new OnScenePreload();
 
 	// region Callback order specifiers.
+	public static final NerdScenesModuleSettings.NerdSceneLayerCallbackOrder preFirstDefaultCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.SCENE;
+	public static final NerdScenesModuleSettings.NerdSceneLayerCallbackOrder drawFirstDefaultCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.SCENE;
+	public static final NerdScenesModuleSettings.NerdSceneLayerCallbackOrder postFirstDefaultCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.SCENE;
+
 	/**
 	 * Controls whether {@linkplain NerdScene#pre() NerdScene::pre()} or
 	 * {@linkplain NerdLayer#pre() NerdLayer::pre()} is called first by the
@@ -144,7 +148,7 @@ public class NerdScenesModuleSettings<SketchPGraphicsT extends PGraphics>
 	 * is set to its default, {@linkplain NerdSceneLayerCallbackOrder#SCENE
 	 * NerdSceneLayerCallbackOrder::SCENE}.
 	 */
-	public NerdScenesModuleSettings.NerdSceneLayerCallbackOrder preFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.SCENE;
+	public NerdScenesModuleSettings.NerdSceneLayerCallbackOrder preFirstCaller = preFirstDefaultCaller;
 
 	/**
 	 * Controls whether {@linkplain NerdScene#draw() NerdScene::draw()} or
@@ -153,7 +157,7 @@ public class NerdScenesModuleSettings<SketchPGraphicsT extends PGraphics>
 	 * is set to its default, {@linkplain NerdSceneLayerCallbackOrder#SCENE
 	 * NerdSceneLayerCallbackOrder::SCENE}.
 	 */
-	public NerdScenesModuleSettings.NerdSceneLayerCallbackOrder drawFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.SCENE;
+	public NerdScenesModuleSettings.NerdSceneLayerCallbackOrder drawFirstCaller = drawFirstDefaultCaller;
 
 	/**
 	 * Controls whether {@linkplain NerdScene#post() NerdScene::post()} or
@@ -162,13 +166,19 @@ public class NerdScenesModuleSettings<SketchPGraphicsT extends PGraphics>
 	 * is set to its default, {@linkplain NerdSceneLayerCallbackOrder#SCENE
 	 * NerdSceneLayerCallbackOrder::SCENE}.
 	 */
-	public NerdScenesModuleSettings.NerdSceneLayerCallbackOrder postFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.SCENE;
+	public NerdScenesModuleSettings.NerdSceneLayerCallbackOrder postFirstCaller = postFirstDefaultCaller;
 	// endregion
 
-	public Set<Class<? extends NerdScene<?>>> classesOfScenesToPreload = new HashSet<>(0);
+	public final Set<Class<? extends NerdScene<?>>> SCENES_TO_PRELOAD_CLASSES = new HashSet<>(0);
 
 	public NerdScenesModuleSettings(final Class<? extends NerdScene<SketchPGraphicsT>> p_firstSceneClass) {
 		this.FIRST_SCENE_CLASS = p_firstSceneClass;
+	}
+
+	public void setSceneLayerCallbackOrderToDefault() {
+		this.preFirstCaller = NerdScenesModuleSettings.preFirstDefaultCaller;
+		this.drawFirstCaller = NerdScenesModuleSettings.drawFirstDefaultCaller;
+		this.postFirstCaller = NerdScenesModuleSettings.postFirstDefaultCaller;
 	}
 
 	@Override

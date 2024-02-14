@@ -608,6 +608,9 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	// region Construction-and-setup operations!
 	protected Constructor<? extends NerdScene<SketchPGraphicsT>> getSceneConstructor(
 			final Class<? extends NerdScene<SketchPGraphicsT>> p_sceneClass) {
+		if (this.hasCached(p_sceneClass))
+			return this.SCENE_CLASS_TO_CACHE_MAP.get(p_sceneClass).CONSTRUCTOR;
+
 		try {
 			return p_sceneClass.getDeclaredConstructor(NerdScenesModule.class);
 		} catch (final NoSuchMethodException e) {
@@ -693,11 +696,8 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 				super.SKETCH.background(this.SETTINGS.ON_SWITCH.clearColor);
 		}
 
-		if (this.SETTINGS.ON_SWITCH.resetSceneLayerCallbackOrder) {
-			this.SETTINGS.preFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.SCENE;
-			this.SETTINGS.drawFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
-			this.SETTINGS.postFirstCaller = NerdScenesModuleSettings.NerdSceneLayerCallbackOrder.LAYER;
-		}
+		if (this.SETTINGS.ON_SWITCH.resetSceneLayerCallbackOrder)
+			this.SETTINGS.setSceneLayerCallbackOrderToDefault();
 		// endregion
 
 		this.previousSceneClass = this.currentSceneClass;
@@ -714,9 +714,6 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 			if (sceneCache != null)
 				sceneCache.nullifyCache();// Sets the `NerdScene` instance to `null`, then calls `System.gc()`!
 		}
-
-		// ...And we'll call `System.gc()` again!
-		System.gc();
 
 		this.currentSceneClass = (Class<NerdScene<SketchPGraphicsT>>) p_currentScene.getClass();
 		this.currentScene = p_currentScene;

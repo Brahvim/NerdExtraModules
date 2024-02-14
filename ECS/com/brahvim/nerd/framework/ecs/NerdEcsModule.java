@@ -30,11 +30,15 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 	// region Fields.
 	public static final long serialVersionUID = -6488574946L;
 
-	private static final Class<? extends NerdEcsSystem<? extends NerdEcsComponent>>[] DEFAULT_ECS_SYSTEMS_ORDER = null;
+	@SuppressWarnings("unchecked")
+	private static final Class<? extends NerdEcsSystem<? extends NerdEcsComponent>>[] //
+	DEFAULT_ECS_SYSTEMS_ORDER = //
+			(Class<? extends NerdEcsSystem<? extends NerdEcsComponent>>[]) //
+			new Class<?>[0];
 	// Loooooooooong declaration!:
-	// (Class<? extends NerdEcsSystem<? extends NerdEcsComponent>>[]) Set
-	// .<Class<? extends NerdEcsSystem<? extends NerdEcsComponent>>>of(null, null,
-	// null).toArray();
+	// Set.<Class<? extends NerdEcsSystem<? extends NerdEcsComponent>>>of(
+	//
+	// ).toArray(new Class[0]);
 
 	// `Set`s:
 	protected final Set<NerdEcsComponent> COMPONENTS = new HashSet<>();
