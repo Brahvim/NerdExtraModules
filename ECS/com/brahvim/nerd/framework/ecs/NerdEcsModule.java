@@ -215,9 +215,9 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 	}
 
 	public String getNameFromEntity(final NerdEcsEntity<SketchPGraphicsT> p_entity) {
-		for (final var e : this.NAME_TO_ENTITY_MAP.entrySet())
-			if (e.getValue() == p_entity)
-				return e.getKey();
+		for (final var entry : this.NAME_TO_ENTITY_MAP.entrySet())
+			if (entry.getValue() == p_entity)
+				return entry.getKey();
 
 		return "";
 	}
@@ -328,8 +328,8 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 			this.NAME_TO_ENTITY_MAP.forEach(p_action);
 
 		// Older method:
-		// for (final var e : this.ENTITY_TO_NAME_MAP.entrySet())
-		// p_action.accept(e.getKey(), e.getValue());
+		// for (final var entry : this.ENTITY_TO_NAME_MAP.entrySet())
+		// p_action.accept(entry.getKey(), entry.getValue());
 	}
 
 	public void forEachEntityUnnamed(final Consumer<NerdEcsEntity<SketchPGraphicsT>> p_action) {
@@ -420,11 +420,11 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 
 		// region Reducing `LinkedList` elements, and modifying `NAME_TO_ENTITY_MAP`.
 		// Remove elements not available in the lists in the deserialized module:
-		for (final var e : Map.of(
+		for (final var entry : Map.of(
 				this.ENTITIES, p_deserialized.entities,
 				this.COMPONENTS, p_deserialized.components).entrySet()) {
-			final LinkedList<?> myList = (LinkedList<?>) e.getKey();
-			final LinkedList<?> otherList = (LinkedList<?>) e.getValue();
+			final LinkedList<?> myList = (LinkedList<?>) entry.getKey();
+			final LinkedList<?> otherList = (LinkedList<?>) entry.getValue();
 
 			for (int i = myList.size() - 1; i > -1; i--) {
 				final Object o = myList.get(i); // This is why I used a `LinkedList`.
@@ -439,8 +439,8 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 		final Map<String, NerdEcsEntity<SketchPGraphicsT>> myMap = this.NAME_TO_ENTITY_MAP,
 				otherMap = p_deserialized.nameToEntityMap;
 
-		for (final var e : myMap.entrySet()) {
-			final String key = e.getKey();
+		for (final var entry : myMap.entrySet()) {
+			final String key = entry.getKey();
 			if (!otherMap.containsKey(key))
 				toRemove.add(key);
 		}
@@ -448,8 +448,8 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 		for (final var s : toRemove)
 			myMap.remove(s);
 
-		for (final var e : otherMap.entrySet())
-			myMap.putIfAbsent(e.getKey(), e.getValue());
+		for (final var entry : otherMap.entrySet())
+			myMap.putIfAbsent(entry.getKey(), entry.getValue());
 		// endregion
 		// endregion
 
