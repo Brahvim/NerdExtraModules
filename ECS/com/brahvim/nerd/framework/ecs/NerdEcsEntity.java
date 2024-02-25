@@ -36,7 +36,7 @@ public final class NerdEcsEntity<SketchPGraphicsT extends PGraphics> implements 
 	 */
 	public boolean hasComponent(final NerdEcsComponent p_component) {
 		if (p_component != null)
-			for (final NerdEcsComponent c : this.COMPONENTS)
+			for (final var c : this.COMPONENTS)
 				if (c == p_component)
 					return true;
 		return false;
@@ -54,7 +54,7 @@ public final class NerdEcsEntity<SketchPGraphicsT extends PGraphics> implements 
 			final ComponentT p_component,
 			final Consumer<ComponentT> p_taskIfFound) {
 		if (p_component != null)
-			for (final NerdEcsComponent c : this.COMPONENTS)
+			for (final var c : this.COMPONENTS)
 				if (c == p_component) {
 					p_taskIfFound.accept(p_component);
 					return true;
@@ -76,7 +76,7 @@ public final class NerdEcsEntity<SketchPGraphicsT extends PGraphics> implements 
 			final Runnable p_taskIfNotFound,
 			final Consumer<ComponentT> p_taskIfFound) {
 		if (p_component != null)
-			for (final NerdEcsComponent c : this.COMPONENTS)
+			for (final var c : this.COMPONENTS)
 				if (c == p_component) {
 					p_taskIfFound.accept(p_component);
 					return true;
@@ -96,7 +96,7 @@ public final class NerdEcsEntity<SketchPGraphicsT extends PGraphics> implements 
 	 */
 	public boolean hasComponentOfClass(final Class<? extends NerdEcsComponent> p_componentClass) {
 		if (p_componentClass != null)
-			for (final NerdEcsComponent c : this.COMPONENTS)
+			for (final var c : this.COMPONENTS)
 				if (c.getClass() == p_componentClass)
 					return true;
 
@@ -117,7 +117,7 @@ public final class NerdEcsEntity<SketchPGraphicsT extends PGraphics> implements 
 			final Class<ComponentT> p_componentClass,
 			final Consumer<ComponentT> p_taskIfFound) {
 		if (p_componentClass != null)
-			for (final NerdEcsComponent c : this.COMPONENTS)
+			for (final var c : this.COMPONENTS)
 				if (c.getClass() == p_componentClass) {
 					p_taskIfFound.accept((ComponentT) c);
 					return true;
@@ -143,7 +143,7 @@ public final class NerdEcsEntity<SketchPGraphicsT extends PGraphics> implements 
 			final Runnable p_taskIfNotFound,
 			final Consumer<ComponentT> p_taskIfFound) {
 		if (p_componentClass != null)
-			for (final NerdEcsComponent c : this.COMPONENTS)
+			for (final var c : this.COMPONENTS)
 				if (c.getClass() == p_componentClass) {
 					p_taskIfFound.accept((ComponentT) c);
 					return true;
@@ -155,7 +155,7 @@ public final class NerdEcsEntity<SketchPGraphicsT extends PGraphics> implements 
 
 	@SuppressWarnings("unchecked")
 	public <ComponentT extends NerdEcsComponent> ComponentT getComponent(final Class<ComponentT> p_componentClass) {
-		for (final NerdEcsComponent c : this.COMPONENTS)
+		for (final var c : this.COMPONENTS)
 			if (c.getClass().equals(p_componentClass))
 				return (ComponentT) c;
 
@@ -185,7 +185,7 @@ public final class NerdEcsEntity<SketchPGraphicsT extends PGraphics> implements 
 	public void removeAllComponentsOfCondition(final Predicate<NerdEcsComponent> p_ifStatement) {
 		final Set<NerdEcsComponent> toRemove = new LinkedHashSet<>();
 
-		for (final NerdEcsComponent c : this.COMPONENTS)
+		for (final var c : this.COMPONENTS)
 			if (p_ifStatement.test(c))
 				toRemove.add(c);
 
@@ -195,7 +195,7 @@ public final class NerdEcsEntity<SketchPGraphicsT extends PGraphics> implements 
 	public void removeAllComponentsTyped(final Class<? extends NerdEcsComponent> p_componentClass) {
 		final Set<NerdEcsComponent> toRemove = new LinkedHashSet<>();
 
-		for (final NerdEcsComponent c : this.COMPONENTS)
+		for (final var c : this.COMPONENTS)
 			if (c.getClass().equals(p_componentClass))
 				toRemove.add(c);
 
@@ -206,7 +206,7 @@ public final class NerdEcsEntity<SketchPGraphicsT extends PGraphics> implements 
 	public <ComponentT extends NerdEcsComponent> ComponentT removeComponent(final Class<ComponentT> p_componentClass) {
 		ComponentT toRet = null;
 
-		for (final NerdEcsComponent c : this.COMPONENTS)
+		for (final var c : this.COMPONENTS)
 			if (c.getClass().equals(p_componentClass))
 				toRet = (ComponentT) c;
 

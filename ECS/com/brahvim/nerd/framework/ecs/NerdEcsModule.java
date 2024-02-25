@@ -75,7 +75,7 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 		if (this.ecsSystems.length == 0)
 			return;
 
-		for (final NerdEcsSystem<?> s : this.ecsSystems)
+		for (final var s : this.ecsSystems)
 			if (s != null)
 				p_methodRef.accept(s, this.CLASSES_TO_COMPONENTS_MAP.get(s.getComponentTypeClass()));
 	}
@@ -90,7 +90,7 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 		if (this.ecsSystems.length == 0)
 			return;
 
-		for (final NerdEcsSystem<?> s : this.ecsSystems)
+		for (final var s : this.ecsSystems)
 			if (s != null)
 				p_methodRef.accept(s, p_otherArg,
 						this.CLASSES_TO_COMPONENTS_MAP.get(s.getComponentTypeClass()));
@@ -105,7 +105,7 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 		if (this.ecsSystems.length == 0)
 			return;
 
-		for (final NerdEcsSystem<?> s : this.ecsSystems)
+		for (final var s : this.ecsSystems)
 			if (s != null)
 				p_methodRef.accept(s, p_otherArg);
 	}
@@ -118,7 +118,7 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 		if (this.ecsSystems.length == 0)
 			return;
 
-		for (final NerdEcsSystem<?> s : this.ecsSystems)
+		for (final var s : this.ecsSystems)
 			if (s != null)
 				p_methodRef.accept(s);
 	}
@@ -420,7 +420,7 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 
 		// region Reducing `LinkedList` elements, and modifying `NAME_TO_ENTITY_MAP`.
 		// Remove elements not available in the lists in the deserialized module:
-		for (final Map.Entry<?, ?> e : Map.of(
+		for (final var e : Map.of(
 				this.ENTITIES, p_deserialized.entities,
 				this.COMPONENTS, p_deserialized.components).entrySet()) {
 			final LinkedList<?> myList = (LinkedList<?>) e.getKey();
@@ -445,7 +445,7 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 				toRemove.add(key);
 		}
 
-		for (final String s : toRemove)
+		for (final var s : toRemove)
 			myMap.remove(s);
 
 		for (final var e : otherMap.entrySet())
@@ -485,12 +485,12 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 
 	// @SuppressWarnings("all")
 	// protected void mousePressed() {
-	// for (final NerdEcsSystem s : this.SYSTEMS) {
+	// for (final var s : this.SYSTEMS) {
 	// if (s == null)
 	// continue;
 	// final int numComponents = this.COMPONENTS.size();
 	// final int numComponentsMinusTwo = this.COMPONENTS.size() - 2;
-	// for (final int i = 0; i < numComponents;) {
+	// for (final var i = 0; i < numComponents;) {
 	// final NerdEcsComponent c = this.COMPONENTS.get(i);
 	// // The logic/Math here needs improvement, sure...
 	// final NerdEcsComponent p = i < 0 ? null : this.COMPONENTS.get(i + 1);

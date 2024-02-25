@@ -2,7 +2,7 @@ package com.brahvim.nerd.framework.ecs;
 
 import java.io.Externalizable;
 
-import com.brahvim.nerd.utils.NerdByteSerialUtils;
+import com.brahvim.nerd.utils.NerdReflectionUtils;
 
 public abstract class NerdEcsComponentPacket<PacketComponentT extends NerdEcsComponent> implements Externalizable {
 
@@ -17,7 +17,7 @@ public abstract class NerdEcsComponentPacket<PacketComponentT extends NerdEcsCom
 
 	protected NerdEcsComponentPacket(final PacketComponentT p_component) {
 		this.component = p_component;
-		this.versionNumber = NerdByteSerialUtils.getClassHierarchyDepthOf(this.getClass());
+		this.versionNumber = NerdReflectionUtils.getClassHierarchyDepthOf(this.getClass());
 
 		if (this.versionNumber == 0)
 			throw new UnsupportedOperationException(

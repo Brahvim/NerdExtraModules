@@ -171,7 +171,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	// `NerdLayer` callers:
 	protected void callOnCurrSceneActiveLayers(final Consumer<NerdLayer<?>> p_eventCallbackMethod) {
 		if (p_eventCallbackMethod != null)
-			for (final NerdLayer<?> l : this.currentScene.getLayers())
+			for (final var l : this.currentScene.getLayers())
 				if (l != null)
 					if (l.isActive())
 						p_eventCallbackMethod.accept(l);
@@ -180,7 +180,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	protected <OtherArgT> void callOnCurrSceneActiveLayers(
 			final BiConsumer<NerdLayer<?>, OtherArgT> p_eventCallbackMethod, final OtherArgT p_otherArg) {
 		if (p_eventCallbackMethod != null)
-			for (final NerdLayer<?> l : this.currentScene.getLayers())
+			for (final var l : this.currentScene.getLayers())
 				if (l != null)
 					if (l.isActive())
 						p_eventCallbackMethod.accept(l, p_otherArg);
