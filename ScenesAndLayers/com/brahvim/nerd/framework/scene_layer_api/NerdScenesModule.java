@@ -2,9 +2,10 @@ package com.brahvim.nerd.framework.scene_layer_api;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -96,11 +97,11 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	protected final Map<Class<? extends NerdScene<SketchPGraphicsT>>, NerdScenesModuleSceneCache<SketchPGraphicsT>>
 	/*   */ SCENE_CLASS_TO_CACHE_MAP = new HashMap<>(2);
 
-	protected final Set<NerdScenesModule.NerdScenesModuleNewSceneStartedListener>
-	/*   */ SCENE_CHANGED_LISTENERS = new LinkedHashSet<>(0); // Not gunna have any, will we?
+	protected final List<NerdScenesModule.NerdScenesModuleNewSceneStartedListener>
+	/*   */ SCENE_CHANGED_LISTENERS = new ArrayList<>(0); // Not gunna have any, will we?
 
-	protected final Set<NerdScenesModule.NerdScenesModuleNewSceneStartedListener>
-	/*   */ SCENE_CHANGED_LISTENERS_TO_REMOVE = new LinkedHashSet<>(0); // Not gunna have any, will we?
+	protected final List<NerdScenesModule.NerdScenesModuleNewSceneStartedListener>
+	/*   */ SCENE_CHANGED_LISTENERS_TO_REMOVE = new ArrayList<>(0); // Not gunna have any, will we?
 
 	protected Class<? extends NerdScene<SketchPGraphicsT>> currentSceneClass, previousSceneClass;
 	// endregion

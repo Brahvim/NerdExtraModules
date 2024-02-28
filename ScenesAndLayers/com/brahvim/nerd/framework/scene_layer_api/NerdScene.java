@@ -59,8 +59,6 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 
 	// Start at `0`. "Who needs layers anyway?"
 	private final List<NerdLayer<SketchPGraphicsT>> LAYERS = new ArrayList<>(0);
-	// Worth remembering: `LinkedHashSet`s allow duplicate objects, store everything
-	// in *insertion order*, but have no `indexOf()` method!
 
 	private final Map<Class<? extends NerdLayer<SketchPGraphicsT>>, Constructor<? extends NerdLayer<SketchPGraphicsT>>>
 	/*   */ LAYER_CONSTRUCTORS = new HashMap<>(0);

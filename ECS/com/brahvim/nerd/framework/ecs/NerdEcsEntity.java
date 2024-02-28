@@ -2,9 +2,9 @@ package com.brahvim.nerd.framework.ecs;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -21,7 +21,10 @@ public final class NerdEcsEntity<SketchPGraphicsT extends PGraphics> implements 
 	protected final transient NerdEcsModule<SketchPGraphicsT> MANAGER;
 	protected final transient NerdEcsEntity<SketchPGraphicsT> ENTITY = this;
 
-	private final Set<NerdEcsComponent> COMPONENTS = new LinkedHashSet<>();
+	// What is an ECS? A kind of data-oriented design?
+	// This is totally not data-oriented design haha. Use an `ArrayList`!!!
+	// TODO: CHECK for duplicates! Perhaps even write a subclass for `ArrayList`.
+	private final List<NerdEcsComponent> COMPONENTS = new ArrayList<>();
 	// endregion
 
 	protected NerdEcsEntity(final NerdEcsModule<SketchPGraphicsT> p_module) {
@@ -183,7 +186,7 @@ public final class NerdEcsEntity<SketchPGraphicsT extends PGraphics> implements 
 	}
 
 	public void removeAllComponentsOfCondition(final Predicate<NerdEcsComponent> p_ifStatement) {
-		final Set<NerdEcsComponent> toRemove = new LinkedHashSet<>();
+		final List<NerdEcsComponent> toRemove = new ArrayList<>();
 
 		for (final var c : this.COMPONENTS)
 			if (p_ifStatement.test(c))
@@ -193,7 +196,7 @@ public final class NerdEcsEntity<SketchPGraphicsT extends PGraphics> implements 
 	}
 
 	public void removeAllComponentsTyped(final Class<? extends NerdEcsComponent> p_componentClass) {
-		final Set<NerdEcsComponent> toRemove = new LinkedHashSet<>();
+		final List<NerdEcsComponent> toRemove = new ArrayList<>();
 
 		for (final var c : this.COMPONENTS)
 			if (c.getClass().equals(p_componentClass))
