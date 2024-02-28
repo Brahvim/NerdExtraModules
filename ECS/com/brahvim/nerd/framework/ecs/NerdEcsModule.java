@@ -238,7 +238,7 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 
 		this.ecsSystems = new NerdEcsSystem<?>[p_ecsSystems.length];
 
-		for (int i = 0; i < this.ecsSystems.length; i++) {
+		for (int i = 0; i < this.ecsSystems.length; ++i) {
 			final Class<? extends NerdEcsSystem<?>> systemClass = p_ecsSystems[i];
 
 			NerdEcsSystem<? extends NerdEcsComponent> system = null;
@@ -426,7 +426,7 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 			final LinkedList<?> myList = (LinkedList<?>) entry.getKey();
 			final LinkedList<?> otherList = (LinkedList<?>) entry.getValue();
 
-			for (int i = myList.size() - 1; i > -1; i--) {
+			for (int i = myList.size() - 1; i > -1; --i) {
 				final Object o = myList.get(i); // This is why I used a `LinkedList`.
 				if (!otherList.contains(o)) // It's possible to remove stuff concurrently.
 					myList.remove(o);

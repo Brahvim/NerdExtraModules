@@ -171,7 +171,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 		final int LAYERS_SIZE = this.LAYERS.size();
 
 		// For every `NerdLayer`,
-		for (; i != LAYERS_SIZE; i++) {
+		for (; i != LAYERS_SIZE; ++i) {
 			final NerdLayer<SketchPGraphicsT> l = this.LAYERS.get(i);
 
 			if (l != null) // If it ain't `null`,
@@ -204,7 +204,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 		final int LAYERS_SIZE = this.LAYERS.size();
 
 		// For every `NerdLayer`,
-		for (; i != LAYERS_SIZE; i++) {
+		for (; i != LAYERS_SIZE; ++i) {
 			final NerdLayer<SketchPGraphicsT> l = this.LAYERS.get(i);
 
 			if (l != null) // If it ain't `null`,
@@ -247,7 +247,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 		final int LAYERS_SIZE = this.LAYERS.size();
 
 		// For every `NerdLayer`,
-		for (; i != LAYERS_SIZE; i++) {
+		for (; i != LAYERS_SIZE; ++i) {
 			final NerdLayer<SketchPGraphicsT> l = this.LAYERS.get(i);
 			if (l != null) // If it ain't `null`,
 				if (l.getClass().equals(p_layerClass)) // And it be from ma' class,
@@ -340,7 +340,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 	 * public final NerdLayer[] addLayers(final Class<? extends NerdLayer>...
 	 * p_layerClasses) {
 	 * final NerdLayer[] toRet = new NerdLayer[p_layerClasses.length];
-	 * for (int i = 0; i < p_layerClasses.length; i++) {
+	 * for (int i = 0; i < p_layerClasses.length; ++i) {
 	 * final Class<? extends NerdLayer> c = p_layerClasses[i];
 	 * toRet[i] = this.addLayers(c);
 	 * }
