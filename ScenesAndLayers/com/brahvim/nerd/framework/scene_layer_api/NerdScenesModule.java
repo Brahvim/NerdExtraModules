@@ -637,7 +637,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 
 		// region Get an instance if possible!
 		try {
-			p_sceneConstructor.setAccessible(true); // NOSONAR
+			p_sceneConstructor.setAccessible(true); // NOSONAR!
 			toRet = p_sceneConstructor.newInstance(this);
 			p_sceneConstructor.setAccessible(false);
 		} catch (final InstantiationException | IllegalAccessException

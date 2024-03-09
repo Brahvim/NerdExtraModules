@@ -2,10 +2,11 @@ package com.brahvim.nerd.framework.ecs;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -423,8 +424,8 @@ public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModul
 		for (final var entry : Map.of(
 				this.ENTITIES, p_deserialized.entities,
 				this.COMPONENTS, p_deserialized.components).entrySet()) {
-			final LinkedList<?> myList = (LinkedList<?>) entry.getKey();
-			final LinkedList<?> otherList = (LinkedList<?>) entry.getValue();
+			final List<?> myList = (ArrayList<?>) entry.getKey();
+			final List<?> otherList = (ArrayList<?>) entry.getValue();
 
 			for (int i = myList.size() - 1; i > -1; --i) {
 				final Object o = myList.get(i); // This is why I used a `LinkedList`.

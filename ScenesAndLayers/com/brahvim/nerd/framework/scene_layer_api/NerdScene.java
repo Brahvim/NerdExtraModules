@@ -429,7 +429,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 
 		// region Construct `toRet`.
 		try {
-			p_layerConstructor.setAccessible(true); // NOSONAR
+			p_layerConstructor.setAccessible(true); // NOSONAR!
 			toRet = p_layerConstructor.newInstance(this);
 			p_layerConstructor.setAccessible(false);
 		} catch (final InstantiationException

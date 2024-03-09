@@ -18,10 +18,10 @@ public class NerdEcsModuleData<SketchPGraphicsT extends PGraphics> implements Se
 
 	protected long numUnnamedEntities = 1;
 	protected NerdEcsSystem<?>[] ecsSystems;
-	protected Set<NerdEcsEntity<SketchPGraphicsT>> entities; // NOSONAR
-	protected Set<NerdEcsComponent> components; // NOSONAR
-	protected Map<String, NerdEcsEntity<SketchPGraphicsT>> nameToEntityMap; // NOSONAR
-	protected Map<Class<? extends NerdEcsComponent>, HashSet<NerdEcsComponent>> classesToComponentsMap; // NOSONAR
+	protected Set<NerdEcsEntity<SketchPGraphicsT>> entities; // NOSONAR!
+	protected Set<NerdEcsComponent> components; // NOSONAR!
+	protected Map<String, NerdEcsEntity<SketchPGraphicsT>> nameToEntityMap; // NOSONAR!
+	protected Map<Class<? extends NerdEcsComponent>, HashSet<NerdEcsComponent>> classesToComponentsMap; // NOSONAR!
 
 	@SuppressWarnings("unused")
 	private NerdEcsModuleData() {
