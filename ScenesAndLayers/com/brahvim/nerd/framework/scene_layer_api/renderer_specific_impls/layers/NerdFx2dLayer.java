@@ -1,8 +1,8 @@
 package com.brahvim.nerd.framework.scene_layer_api.renderer_specific_impls.layers;
 
+import com.brahvim.nerd.framework.graphics_backends.NerdFx2dGraphics;
 import com.brahvim.nerd.framework.scene_layer_api.NerdLayer;
 import com.brahvim.nerd.framework.scene_layer_api.NerdScene;
-import com.brahvim.nerd.processing_wrapper.graphics_backends.NerdFx2dGraphics;
 import com.brahvim.nerd.window_management.NerdWindowModule;
 import com.brahvim.nerd.window_management.window_module_impls.NerdFx2dWindowModule;
 
