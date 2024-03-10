@@ -175,7 +175,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 			if (l != null) // If it ain't `null`,
 				if (l.getClass().equals(p_layerClass)) // And it be from ma' class,
 					if (!l.isActive()) // ...if it ain't active,
-						p_task.accept((T) l); // ...perform the given task, brah!
+						p_task.accept((T) l); // ...perform the given task!
 		}
 
 		// If no `NerdLayer`s were found, perform the other task!:
@@ -208,7 +208,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 			if (l != null) // If it ain't `null`,
 				if (l.getClass().equals(p_layerClass)) // And it be from ma' class,
 					if (l.isActive()) // ...if it is active,
-						p_task.accept((T) l); // ...perform the given task, brah!
+						p_task.accept((T) l); // ...perform the given task!
 		}
 
 		// If no `NerdLayer`s were found, perform the other task!:
@@ -249,7 +249,7 @@ public abstract class NerdScene<SketchPGraphicsT extends PGraphics> {
 			final NerdLayer<SketchPGraphicsT> l = this.LAYERS.get(i);
 			if (l != null) // If it ain't `null`,
 				if (l.getClass().equals(p_layerClass)) // And it be from ma' class,
-					p_task.accept((T) l); // ...perform the given task, brah!
+					p_task.accept((T) l); // ...perform the given task!
 		}
 
 		// If no `NerdLayer`s were found, perform the other task!:
