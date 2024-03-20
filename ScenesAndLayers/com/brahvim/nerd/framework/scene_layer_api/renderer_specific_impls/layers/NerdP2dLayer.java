@@ -10,13 +10,13 @@ import processing.opengl.PGraphics2D;
 
 public class NerdP2dLayer extends NerdLayer<PGraphics2D> {
 
-    public final NerdP2dGraphics GRAPHICS;
-    public final NerdGlWindowModule WINDOW;
+	public final NerdP2dGraphics GRAPHICS;
+	public final NerdGlWindowModule WINDOW;
 
-    protected NerdP2dLayer(final NerdScene<PGraphics2D> p_scene) {
-        super(p_scene);
-        this.GRAPHICS = (NerdP2dGraphics) super.GENERIC_GRAPHICS;
-        this.WINDOW = (NerdGlWindowModule) (NerdWindowModule<?>) super.GENERIC_WINDOW;
-    }
+	protected NerdP2dLayer(final NerdScene<PGraphics2D> p_scene) {
+		super(p_scene);
+		this.GRAPHICS = (NerdP2dGraphics) super.GENERIC_GRAPHICS;
+		this.WINDOW = (NerdGlWindowModule) (NerdWindowModule<?>) super.GENERIC_WINDOW;
+	}
 
 }

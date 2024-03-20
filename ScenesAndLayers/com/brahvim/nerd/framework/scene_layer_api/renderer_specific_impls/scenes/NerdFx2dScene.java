@@ -10,13 +10,13 @@ import processing.javafx.PGraphicsFX2D;
 
 public class NerdFx2dScene extends NerdScene<PGraphicsFX2D> {
 
-    public final NerdFx2dGraphics GRAPHICS;
-    public final NerdFx2dWindowModule WINDOW;
+	public final NerdFx2dGraphics GRAPHICS;
+	public final NerdFx2dWindowModule WINDOW;
 
-    protected NerdFx2dScene(final NerdScenesModule<PGraphicsFX2D> p_sceneMan) {
-        super(p_sceneMan);
-        this.GRAPHICS = (NerdFx2dGraphics) super.GENERIC_GRAPHICS;
-        this.WINDOW = (NerdFx2dWindowModule) (NerdWindowModule<?>) super.GENERIC_WINDOW;
-    }
+	protected NerdFx2dScene(final NerdScenesModule<PGraphicsFX2D> p_sceneMan) {
+		super(p_sceneMan);
+		this.GRAPHICS = (NerdFx2dGraphics) super.GENERIC_GRAPHICS;
+		this.WINDOW = (NerdFx2dWindowModule) (NerdWindowModule<?>) super.GENERIC_WINDOW;
+	}
 
 }

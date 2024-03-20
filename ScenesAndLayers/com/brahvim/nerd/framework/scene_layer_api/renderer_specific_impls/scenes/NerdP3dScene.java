@@ -10,13 +10,13 @@ import processing.opengl.PGraphics3D;
 
 public abstract class NerdP3dScene extends NerdScene<PGraphics3D> {
 
-    public final NerdGlWindowModule WINDOW;
-    public final NerdP3dGraphics GRAPHICS;
+	public final NerdGlWindowModule WINDOW;
+	public final NerdP3dGraphics GRAPHICS;
 
-    protected NerdP3dScene(final NerdScenesModule<PGraphics3D> p_sceneMan) {
-        super(p_sceneMan);
-        this.GRAPHICS = (NerdP3dGraphics) super.GENERIC_GRAPHICS;
-        this.WINDOW = (NerdGlWindowModule) (NerdWindowModule<?>) super.GENERIC_WINDOW;
-    }
+	protected NerdP3dScene(final NerdScenesModule<PGraphics3D> p_sceneMan) {
+		super(p_sceneMan);
+		this.GRAPHICS = (NerdP3dGraphics) super.GENERIC_GRAPHICS;
+		this.WINDOW = (NerdGlWindowModule) (NerdWindowModule<?>) super.GENERIC_WINDOW;
+	}
 
 }

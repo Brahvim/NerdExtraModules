@@ -9,13 +9,13 @@ import processing.core.PGraphics;
 
 public class NerdAbstractGraphicsScene extends NerdScene<PGraphics> {
 
-    public final NerdAbstractGraphics<?> GRAPHICS;
-    public final NerdWindowModule<PGraphics> WINDOW;
+	public final NerdAbstractGraphics<?> GRAPHICS;
+	public final NerdWindowModule<PGraphics> WINDOW;
 
-    protected NerdAbstractGraphicsScene(final NerdScenesModule<PGraphics> p_sceneMan) {
-        super(p_sceneMan);
-        this.WINDOW = super.GENERIC_WINDOW;
-        this.GRAPHICS = super.GENERIC_GRAPHICS;
-    }
+	protected NerdAbstractGraphicsScene(final NerdScenesModule<PGraphics> p_sceneMan) {
+		super(p_sceneMan);
+		this.WINDOW = super.GENERIC_WINDOW;
+		this.GRAPHICS = super.GENERIC_GRAPHICS;
+	}
 
 }
