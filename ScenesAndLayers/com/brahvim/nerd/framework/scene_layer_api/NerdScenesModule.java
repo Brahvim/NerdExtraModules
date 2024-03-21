@@ -11,6 +11,8 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import com.brahvim.nerd.framework.graphics_backends.NerdP3dGraphics;
+import com.brahvim.nerd.framework.graphics_backends.NerdP3dGraphics.NerdLightSlot;
 import com.brahvim.nerd.io.asset_loader.NerdAssetsModule;
 import com.brahvim.nerd.processing_wrapper.NerdAbstractGraphics;
 import com.brahvim.nerd.processing_wrapper.NerdModule;
@@ -24,7 +26,6 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	// region Inner classes.
 	// My code style: If it is an inner class, also write the name of the outer
 	// class. I do this to aid reading and to prevent namespace pollution.
-	// THIS IS STILL TRUE BAHAHAH!!!
 
 	@FunctionalInterface
 	public interface NerdNewSceneStartedListener {
@@ -742,6 +743,10 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 		// We push and pop the style and transforms to auto-reset. Hah!:
 		super.SKETCH.push();
 		super.SKETCH.textFont(super.SKETCH.getDefaultFont()); // ...Also reset the font. Thanks!
+
+		if (super.SKETCH.getNerdGenericGraphics() instanceof final NerdP3dGraphics g)
+			for (final var s : NerdLightSlot.values())
+				g.clearLightSlot(s);
 
 		this.SCENE_CHANGED_LISTENERS.removeAll(this.SCENE_CHANGED_LISTENERS_TO_REMOVE);
 
