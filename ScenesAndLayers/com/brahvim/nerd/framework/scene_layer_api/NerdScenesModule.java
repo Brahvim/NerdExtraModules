@@ -24,9 +24,10 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	// region Inner classes.
 	// My code style: If it is an inner class, also write the name of the outer
 	// class. I do this to aid reading and to prevent namespace pollution.
+	// THIS IS STILL TRUE BAHAHAH!!!
 
 	@FunctionalInterface
-	public interface NerdScenesModuleNewSceneStartedListener {
+	public interface NerdNewSceneStartedListener {
 		public void sceneChanged(
 				NerdScenesModule<?> scenesModule,
 				Class<? extends NerdScene<?>> previousSceneClass,
@@ -37,7 +38,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	 * Stores scene data while a scene is not active. This is done for purposes such
 	 * as loading assets for the scene before it even starts!
 	 */
-	/* `package` */ class NerdScenesModuleSceneCache<SketchPGraphicsForCacheT extends PGraphics> {
+	/* `package` */ class NerdSceneCache<SketchPGraphicsForCacheT extends PGraphics> {
 
 		// region Fields.
 		/* `package */ int timesLoaded = 0;
@@ -52,7 +53,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 		/* `package */ NerdAssetsModule<SketchPGraphicsForCacheT> cachedAssets;
 		// endregion
 
-		/* `package */ NerdScenesModuleSceneCache(
+		/* `package */ NerdSceneCache(
 				final Constructor<? extends NerdScene<SketchPGraphicsForCacheT>> p_constructor,
 				final NerdScene<SketchPGraphicsForCacheT> p_cachedReference) {
 			this.CONSTRUCTOR = p_constructor;
@@ -86,7 +87,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	 * {@link NerdScenesModule} instance has cached or ran.
 	 * <p>
 	 * Actual "caching" of a {@link NerdScene} is when its corresponding
-	 * {@linkplain NerdScenesModule.NerdScenesModuleSceneCache#cachedReference
+	 * {@linkplain NerdScenesModule.NerdSceneCache#cachedReference
 	 * NerdScenesModule.NerdScenesModuleSceneCache::cachedReference}
 	 * is not{@code null}.
 	 * <p>
@@ -94,13 +95,13 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 	 * does no optimization till the first scene switch. All scene switches after
 	 * that the initial should be fast enough!
 	 */
-	protected final Map<Class<? extends NerdScene<SketchPGraphicsT>>, NerdScenesModuleSceneCache<SketchPGraphicsT>>
+	protected final Map<Class<? extends NerdScene<SketchPGraphicsT>>, NerdSceneCache<SketchPGraphicsT>>
 	/*   */ SCENE_CLASS_TO_CACHE_MAP = new HashMap<>(2);
 
-	protected final List<NerdScenesModule.NerdScenesModuleNewSceneStartedListener>
+	protected final List<NerdScenesModule.NerdNewSceneStartedListener>
 	/*   */ SCENE_CHANGED_LISTENERS = new ArrayList<>(0); // Not gunna have any, will we?
 
-	protected final List<NerdScenesModule.NerdScenesModuleNewSceneStartedListener>
+	protected final List<NerdScenesModule.NerdNewSceneStartedListener>
 	/*   */ SCENE_CHANGED_LISTENERS_TO_REMOVE = new ArrayList<>(0); // Not gunna have any, will we?
 
 	protected Class<? extends NerdScene<SketchPGraphicsT>> currentSceneClass, previousSceneClass;
@@ -370,25 +371,25 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 
 	// region [`public`] Queries.
 	/**
-	 * Adds a {@link NerdScenesModule.NerdScenesModuleNewSceneStartedListener} that
+	 * Adds a {@link NerdScenesModule.NerdNewSceneStartedListener} that
 	 * allows you to track when a scene starts!
 	 *
 	 * @param p_listener is the listener you want to add.
 	 */
 	public final void addNewSceneStartedListener(
-			final NerdScenesModule.NerdScenesModuleNewSceneStartedListener p_listener) {
+			final NerdScenesModule.NerdNewSceneStartedListener p_listener) {
 		if (p_listener != null)
 			this.SCENE_CHANGED_LISTENERS.add(p_listener);
 	}
 
 	/**
-	 * Removes a {@link NerdScenesModule.NerdScenesModuleNewSceneStartedListener}
+	 * Removes a {@link NerdScenesModule.NerdNewSceneStartedListener}
 	 * that would otherwise allow you to track when a scene starts.
 	 *
 	 * @param p_listener is the listener you want to remove.
 	 */
 	public final void removeNewSceneStartedListener(
-			final NerdScenesModule.NerdScenesModuleNewSceneStartedListener p_listener) {
+			final NerdScenesModule.NerdNewSceneStartedListener p_listener) {
 		this.SCENE_CHANGED_LISTENERS_TO_REMOVE.add(p_listener);
 	}
 
@@ -444,7 +445,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 		if (this.givenSceneRanPreload(p_sceneClass))
 			return;
 
-		final NerdScenesModuleSceneCache<SketchPGraphicsT> sceneCache = this.SCENE_CLASS_TO_CACHE_MAP
+		final NerdSceneCache<SketchPGraphicsT> sceneCache = this.SCENE_CLASS_TO_CACHE_MAP
 				.get(p_sceneClass);
 
 		if (sceneCache != null) {
@@ -575,7 +576,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 		// return !this.SCENE_CACHE.get(p_sceneClass).isSceneCacheNull();
 
 		// Faster!:
-		final NerdScenesModuleSceneCache<SketchPGraphicsT> cachedScene = this.SCENE_CLASS_TO_CACHE_MAP
+		final NerdSceneCache<SketchPGraphicsT> cachedScene = this.SCENE_CLASS_TO_CACHE_MAP
 				.get(p_sceneClass);
 		// return cachedScene == null ? false : !cachedScene.isSceneCacheNull();
 		return cachedScene != null && !cachedScene.isSceneCacheNull(); // SonarLint's 'simplification'!
@@ -603,7 +604,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 					"`NerdScenesModule::constructScene()` returned `null` on an attempt to cache!");
 
 		this.SCENE_CLASS_TO_CACHE_MAP.put(p_sceneClass,
-				new NerdScenesModuleSceneCache<>(sceneConstructor, constructedScene));
+				new NerdSceneCache<>(sceneConstructor, constructedScene));
 	}
 	// endregion
 
@@ -656,7 +657,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 					Please check if your sketch and scene's rendering backends match.""");
 
 		final Class<? extends NerdScene<SketchPGraphicsT>> sceneClass = p_sceneConstructor.getDeclaringClass();
-		final NerdScenesModuleSceneCache<SketchPGraphicsT> sceneCache = this.SCENE_CLASS_TO_CACHE_MAP.get(sceneClass);
+		final NerdSceneCache<SketchPGraphicsT> sceneCache = this.SCENE_CLASS_TO_CACHE_MAP.get(sceneClass);
 
 		if (sceneCache != null) {
 			toRet.STATE.DATA.putAll(sceneCache.STATE.DATA);
@@ -667,7 +668,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 		// ensure it has a cache and a saved state!
 		this.SCENE_CLASS_TO_CACHE_MAP.put(
 				sceneClass,
-				new NerdScenesModuleSceneCache<>(p_sceneConstructor, toRet));
+				new NerdSceneCache<>(p_sceneConstructor, toRet));
 		toRet.STATE.clear();
 
 		return toRet;
@@ -716,7 +717,7 @@ public class NerdScenesModule<SketchPGraphicsT extends PGraphics> extends NerdMo
 			// Exit the scene, and nullify the cache.
 			this.currentScene.runSceneChanged();
 
-			final NerdScenesModuleSceneCache<SketchPGraphicsT>
+			final NerdSceneCache<SketchPGraphicsT>
 			/*   */ sceneCache = this.SCENE_CLASS_TO_CACHE_MAP.get(this.currentSceneClass);
 			if (sceneCache != null)
 				sceneCache.nullifyCache();// Sets the `NerdScene` instance to `null`, then calls `System.gc()`!

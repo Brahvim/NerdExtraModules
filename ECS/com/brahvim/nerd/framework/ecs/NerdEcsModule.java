@@ -26,7 +26,7 @@ import processing.core.PGraphics;
 
 // TODO: This entire thing needs a rewrite to be actually data-oriented.
 public class NerdEcsModule<SketchPGraphicsT extends PGraphics> extends NerdModule<SketchPGraphicsT>
-		implements NerdScenesModule.NerdScenesModuleNewSceneStartedListener {
+		implements NerdScenesModule.NerdNewSceneStartedListener {
 
 	// region Fields.
 	public static final long serialVersionUID = -6488574946L;
