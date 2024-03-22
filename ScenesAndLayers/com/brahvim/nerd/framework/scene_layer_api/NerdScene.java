@@ -15,8 +15,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import com.brahvim.nerd.io.asset_loader.NerdAsset;
 import com.brahvim.nerd.io.asset_loader.NerdAssetsModule;
+import com.brahvim.nerd.io.asset_loader.NerdAssetsModule.NerdAsset;
 import com.brahvim.nerd.processing_wrapper.NerdAbstractGraphics;
 import com.brahvim.nerd.processing_wrapper.NerdSketch;
 import com.brahvim.nerd.window_management.NerdDisplayModule;
